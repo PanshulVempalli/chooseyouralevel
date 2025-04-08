@@ -1,10 +1,12 @@
-
 export interface Course {
   id: string;
   name: string;
   subjects: string[];
   description: string;
-  careerOpportunities?: string[]; // Added this property as optional
+  university?: string;
+  entryRequirements?: string;
+  duration?: string;
+  careerOpportunities?: string[];
 }
 
 export interface Career {
@@ -13,104 +15,174 @@ export interface Career {
   description: string;
   relatedSubjects: string[];
   commonCourses: string[];
-  workEnvironment?: string; // Added this property as optional
-  careerProgression?: string; // Added this property as optional
+  workEnvironment?: string;
+  careerProgression?: string;
 }
 
 export const universityDegrees: Course[] = [
   {
-    id: "medicine",
+    id: "medicine-oxford",
     name: "Medicine",
+    university: "University of Oxford",
     subjects: ["biology", "chemistry", "mathematics", "physics"],
-    description: "Medicine is the study and practice of the diagnosis, prognosis, treatment, and prevention of disease."
+    description: "The Medicine course at Oxford provides a well-rounded intellectual training with particular emphasis on the basic science research that underpins medicine.",
+    entryRequirements: "A*AA at A Level, including Chemistry and at least one of Biology, Physics, or Mathematics",
+    duration: "6 years (including clinical years)",
+    careerOpportunities: ["General Practice", "Hospital Medicine", "Medical Research", "Public Health"]
   },
   {
-    id: "law",
-    name: "Law",
-    subjects: ["english-literature", "history", "politics", "philosophy"],
-    description: "Law studies focus on legal systems, regulations, and preparing students for careers in legal practice."
+    id: "medicine-cambridge",
+    name: "Medicine",
+    university: "University of Cambridge",
+    subjects: ["biology", "chemistry", "mathematics", "physics"],
+    description: "Cambridge's medical course emphasizes the scientific basis of medicine with integrated clinical training from the outset.",
+    entryRequirements: "A*A*A at A Level, including Chemistry and two of Biology, Physics, or Mathematics",
+    duration: "6 years",
+    careerOpportunities: ["Medical Practice", "Academic Medicine", "Clinical Research", "Healthcare Management"]
   },
   {
-    id: "engineering",
-    name: "Engineering",
-    subjects: ["mathematics", "physics", "further-mathematics", "computer-science", "chemistry"],
-    description: "Engineering programs focus on applying scientific and mathematical principles to design and develop solutions to technical problems."
-  },
-  {
-    id: "computer-science-degree",
+    id: "computer-science-imperial",
     name: "Computer Science",
-    subjects: ["mathematics", "physics", "further-mathematics", "computer-science"],
-    description: "Computer Science programs cover programming, algorithms, data structures, artificial intelligence, and software development."
+    university: "Imperial College London",
+    subjects: ["mathematics", "further-mathematics", "computer-science", "physics"],
+    description: "Imperial's Computer Science program combines theoretical study with practical skills in software engineering, artificial intelligence, and data science.",
+    entryRequirements: "A*A*A at A Level, including Mathematics and Further Mathematics",
+    duration: "3-4 years (MEng option available)",
+    careerOpportunities: ["Software Engineering", "Data Science", "Cybersecurity", "AI Research"]
   },
   {
-    id: "english-literature-degree",
+    id: "engineering-manchester",
+    name: "Mechanical Engineering",
+    university: "University of Manchester",
+    subjects: ["mathematics", "physics", "further-mathematics", "design-technology"],
+    description: "Manchester's Mechanical Engineering program focuses on sustainable engineering solutions with strong industry connections.",
+    entryRequirements: "AAA at A Level, including Mathematics and Physics",
+    duration: "3-4 years (MEng option available)",
+    careerOpportunities: ["Mechanical Engineer", "Energy Sector", "Aerospace", "Automotive Industry"]
+  },
+  {
+    id: "english-durham",
     name: "English Literature",
+    university: "Durham University",
     subjects: ["english-literature", "history", "philosophy", "religious-studies"],
-    description: "English Literature degrees involve the study and analysis of texts from different periods and genres."
+    description: "Durham's English Literature degree explores texts across historical periods with opportunities for creative writing and interdisciplinary study.",
+    entryRequirements: "A*AA at A Level, including English Literature",
+    duration: "3 years",
+    careerOpportunities: ["Publishing", "Media", "Teaching", "Marketing and Communications"]
   },
   {
-    id: "economics-degree",
+    id: "law-lse",
+    name: "Law",
+    university: "London School of Economics",
+    subjects: ["english-literature", "history", "politics", "philosophy"],
+    description: "LSE's Law program provides a rigorous understanding of legal principles within their social, political, and economic contexts.",
+    entryRequirements: "A*AA at A Level",
+    duration: "3 years",
+    careerOpportunities: ["Legal Practice", "Corporate Law", "Public Sector", "International Organizations"]
+  },
+  {
+    id: "economics-ucl",
     name: "Economics",
+    university: "University College London",
     subjects: ["economics", "mathematics", "further-mathematics", "politics"],
-    description: "Economics degrees examine the production, distribution, and consumption of goods and services."
+    description: "UCL's Economics program provides theoretical frameworks and practical tools to analyze complex economic problems.",
+    entryRequirements: "A*AA at A Level, including Mathematics",
+    duration: "3 years",
+    careerOpportunities: ["Economic Consulting", "Banking", "Public Policy", "Data Analysis"]
   },
   {
-    id: "psychology-degree",
+    id: "psychology-edinburgh",
     name: "Psychology",
+    university: "University of Edinburgh",
     subjects: ["psychology", "biology", "mathematics", "sociology"],
-    description: "Psychology programs study human behavior and mental processes through scientific research and observation."
+    description: "Edinburgh's Psychology program combines scientific study with practical applications of psychological theory.",
+    entryRequirements: "AAA at A Level",
+    duration: "4 years (Scottish degree system)",
+    careerOpportunities: ["Clinical Psychology", "Research", "Human Resources", "Marketing"]
   },
   {
-    id: "business-management",
+    id: "business-warwick",
     name: "Business Management",
+    university: "University of Warwick",
     subjects: ["business-studies", "economics", "mathematics", "accounting"],
-    description: "Business Management degrees focus on organizational leadership, strategy, marketing, and operations."
+    description: "Warwick Business School's Management program combines theoretical frameworks with practical business application.",
+    entryRequirements: "AAA at A Level",
+    duration: "3 years",
+    careerOpportunities: ["Business Consulting", "Financial Services", "Marketing", "Entrepreneurship"]
   },
   {
-    id: "architecture",
+    id: "architecture-bath",
     name: "Architecture",
+    university: "University of Bath",
     subjects: ["art", "mathematics", "physics", "design-technology"],
-    description: "Architecture programs involve the study of designing buildings and other structures, combining art and science."
+    description: "Bath's Architecture program focuses on sustainable design with strong industry connections.",
+    entryRequirements: "AAA at A Level, including Mathematics or Physics",
+    duration: "3 years (Part 1 of architectural qualification)",
+    careerOpportunities: ["Architectural Practice", "Urban Planning", "Interior Design", "Construction Management"]
   },
   {
-    id: "foreign-languages",
+    id: "languages-bristol",
     name: "Modern Languages",
+    university: "University of Bristol",
     subjects: ["french", "spanish", "german", "english-literature"],
-    description: "Modern Languages degrees focus on language proficiency, literature, and cultural understanding."
+    description: "Bristol's Modern Languages program includes year abroad opportunities and cultural studies alongside language acquisition.",
+    entryRequirements: "AAB at A Level, including at least one modern language",
+    duration: "4 years (including year abroad)",
+    careerOpportunities: ["Translation", "International Business", "Diplomacy", "Tourism and Hospitality"]
   },
   {
-    id: "history-degree",
+    id: "history-kings",
     name: "History",
+    university: "King's College London",
     subjects: ["history", "politics", "english-literature", "philosophy"],
-    description: "History degrees involve studying past events and their significance to understand the present."
+    description: "King's History program emphasizes global perspectives and interdisciplinary approaches to historical study.",
+    entryRequirements: "AAA at A Level, including History",
+    duration: "3 years",
+    careerOpportunities: ["Heritage Sector", "Civil Service", "Journalism", "Education"]
   },
   {
-    id: "physics-degree",
-    name: "Physics",
-    subjects: ["physics", "mathematics", "further-mathematics", "chemistry"],
-    description: "Physics degrees focus on understanding the fundamental laws that govern the universe."
+    id: "physics-birmingham",
+    name: "Physics with Astrophysics",
+    university: "University of Birmingham",
+    subjects: ["physics", "mathematics", "further-mathematics", "computer-science"],
+    description: "Birmingham's Physics with Astrophysics program combines theoretical physics with observational astronomy.",
+    entryRequirements: "A*AA at A Level, including Mathematics and Physics",
+    duration: "3-4 years (MSci option available)",
+    careerOpportunities: ["Research Scientist", "Data Analysis", "Space Industry", "Scientific Computing"]
   },
   {
-    id: "chemistry-degree",
-    name: "Chemistry",
+    id: "chemistry-york",
+    name: "Chemistry with Industrial Experience",
+    university: "University of York",
     subjects: ["chemistry", "mathematics", "physics", "biology"],
-    description: "Chemistry degrees study substances, their properties, and how they interact with each other."
+    description: "York's Chemistry program includes a year in industry with state-of-the-art laboratory facilities.",
+    entryRequirements: "AAB at A Level, including Chemistry and Mathematics or Physics",
+    duration: "4 years (including placement year)",
+    careerOpportunities: ["Chemical Industry", "Pharmaceuticals", "Materials Science", "Environmental Science"]
   },
   {
-    id: "biology-degree",
-    name: "Biological Sciences",
-    subjects: ["biology", "chemistry", "mathematics", "psychology"],
-    description: "Biological Sciences programs cover all aspects of living organisms, from molecules to ecosystems."
+    id: "biology-sheffield",
+    name: "Biological Sciences with Placement Year",
+    university: "University of Sheffield",
+    subjects: ["biology", "chemistry", "mathematics", "environmental-science"],
+    description: "Sheffield's Biological Sciences program offers specialization options and practical research experience.",
+    entryRequirements: "AAB at A Level, including Biology and Chemistry",
+    duration: "4 years (including placement year)",
+    careerOpportunities: ["Biotechnology", "Healthcare", "Conservation", "Scientific Research"]
   },
   {
-    id: "geography-degree",
+    id: "geography-nottingham",
     name: "Geography",
-    subjects: ["geography", "mathematics", "biology", "economics"],
-    description: "Geography degrees examine the Earth's physical features, atmosphere, and human activity."
+    university: "University of Nottingham",
+    subjects: ["geography", "biology", "mathematics", "environmental-science"],
+    description: "Nottingham's Geography program includes field courses and research projects on environmental and social challenges.",
+    entryRequirements: "AAB at A Level, including Geography",
+    duration: "3 years",
+    careerOpportunities: ["Environmental Management", "Urban Planning", "GIS Specialist", "Conservation"]
   }
 ];
 
-export const careers: Career[] = [
+export const careers = [
   {
     id: "doctor",
     name: "Doctor/Medical Professional",

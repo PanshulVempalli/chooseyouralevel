@@ -5,7 +5,7 @@ import { subjects } from "@/data/subjects";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Briefcase, RotateCcw, ExternalLink } from "lucide-react";
+import { BookOpen, Briefcase, RotateCcw, ExternalLink, Clock, Award, Building } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -83,13 +83,16 @@ const ResultsDisplay = ({ courses, careers, selectedSubjects, onReset }: Results
                 <Card key={course.id} className="h-full flex flex-col">
                   <CardHeader>
                     <CardTitle>{course.name}</CardTitle>
-                    <CardDescription>University Degree</CardDescription>
+                    <CardDescription className="flex items-center gap-1">
+                      <Building size={14} />
+                      {course.university || "University Degree"}
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
                     <p className="text-sm mb-4">{course.description}</p>
                     
-                    <div>
-                      <h4 className="text-sm font-medium mb-2">Required/Recommended Subjects:</h4>
+                    <div className="mb-3">
+                      <h4 className="text-sm font-medium mb-1">Required/Recommended Subjects:</h4>
                       <ul className="list-disc list-inside text-sm space-y-1">
                         {course.subjects.map((subjectId) => (
                           <li key={subjectId} className={`${selectedSubjects.includes(subjectId) ? "font-medium text-education-primary" : ""}`}>
@@ -98,6 +101,12 @@ const ResultsDisplay = ({ courses, careers, selectedSubjects, onReset }: Results
                         ))}
                       </ul>
                     </div>
+
+                    {course.duration && (
+                      <div className="text-sm flex items-center text-muted-foreground mt-2">
+                        <Clock size={14} className="mr-1" /> {course.duration}
+                      </div>
+                    )}
                   </CardContent>
                   <CardFooter>
                     <Dialog>
@@ -110,11 +119,20 @@ const ResultsDisplay = ({ courses, careers, selectedSubjects, onReset }: Results
                       <DialogContent className="max-w-lg">
                         <DialogHeader>
                           <DialogTitle className="text-xl">{course.name}</DialogTitle>
-                          <DialogDescription className="text-base opacity-90">University Degree</DialogDescription>
+                          <DialogDescription className="text-base opacity-90">
+                            {course.university || "University Degree"}
+                          </DialogDescription>
                         </DialogHeader>
                         <div className="mt-4">
                           <p className="mb-4">{course.description}</p>
                           
+                          {course.entryRequirements && (
+                            <div className="mb-4">
+                              <h4 className="font-medium mb-2">Entry Requirements:</h4>
+                              <p>{course.entryRequirements}</p>
+                            </div>
+                          )}
+
                           <div className="mb-4">
                             <h4 className="font-medium mb-2">Required/Recommended Subjects:</h4>
                             <ul className="list-disc list-inside space-y-1">
@@ -131,10 +149,17 @@ const ResultsDisplay = ({ courses, careers, selectedSubjects, onReset }: Results
                             <p>Graduates with this degree often pursue careers in: {course.careerOpportunities?.join(", ") || "Various fields related to the subject area"}</p>
                           </div>
                           
+                          {course.duration && (
+                            <div className="mb-4 flex items-center">
+                              <Clock size={16} className="mr-2" />
+                              <h4 className="font-medium mr-2">Duration:</h4>
+                              <p>{course.duration}</p>
+                            </div>
+                          )}
+
                           <div>
                             <h4 className="font-medium mb-2">Additional Information:</h4>
-                            <p>This degree typically takes 3-4 years to complete and may offer opportunities for specialization in later years.</p>
-                            <p className="mt-2">Check with specific universities for detailed entry requirements and course structure.</p>
+                            <p>Check with {course.university || "specific universities"} for detailed entry requirements and course structure.</p>
                           </div>
                         </div>
                       </DialogContent>
