@@ -16,13 +16,20 @@ const Navbar = () => {
           <Link to="/" className="font-medium hover:text-education-primary transition-colors">
             Home
           </Link>
+          <Link to="/subjects" className="font-medium hover:text-education-primary transition-colors">
+            Subjects
+          </Link>
           <Link to="/about" className="font-medium hover:text-education-primary transition-colors">
             About
           </Link>
         </div>
 
         <div className="flex items-center">
-          <Button variant="default" className="bg-education-primary hover:bg-education-primary/90">
+          <Button 
+            variant="default" 
+            className="bg-education-primary hover:bg-education-primary/90"
+            onClick={() => window.location.href = '/#subject-selector'}
+          >
             Get Started
           </Button>
         </div>
