@@ -31,13 +31,13 @@ export const matchSubjectsToPathways = (selectedSubjects: string[]): MatchResult
     return bMatchCount - aMatchCount;
   });
 
-  // Match careers that have at least 1 of the selected subjects
+  // Match careers that have at least 2 of the selected subjects (updated from 1 to 2)
   const matchedCareers = careers.filter(career => {
     const matchCount = career.relatedSubjects.filter(subject => 
       selectedSubjects.includes(subject)
     ).length;
     
-    return matchCount >= 1;
+    return matchCount >= Math.min(2, selectedSubjects.length); // Changed from 1 to match the same logic as courses
   });
 
   // Sort careers by relevance (number of matching subjects)

@@ -4,6 +4,7 @@ export interface Course {
   name: string;
   subjects: string[];
   description: string;
+  careerOpportunities?: string[]; // Added this property as optional
 }
 
 export interface Career {
@@ -12,6 +13,8 @@ export interface Career {
   description: string;
   relatedSubjects: string[];
   commonCourses: string[];
+  workEnvironment?: string; // Added this property as optional
+  careerProgression?: string; // Added this property as optional
 }
 
 export const universityDegrees: Course[] = [
