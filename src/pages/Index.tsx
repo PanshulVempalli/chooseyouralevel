@@ -5,9 +5,10 @@ import Footer from "@/components/Footer";
 import SubjectSelector from "@/components/SubjectSelector";
 import ResultsDisplay from "@/components/ResultsDisplay";
 import { matchSubjectsToPathways, MatchResult } from "@/utils/matchSubjects";
-import { GraduationCap, BookOpen, Award, ArrowRight } from "lucide-react";
+import { GraduationCap, BookOpen, Award, ArrowRight, Calculator } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
@@ -54,7 +55,7 @@ const Index = () => {
                     Choose your A-Level subjects and discover which university courses and careers 
                     they could lead to.
                   </p>
-                  <div className="flex justify-center">
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button 
                       size="lg" 
                       className="text-lg bg-education-primary hover:bg-education-primary/90"
@@ -62,6 +63,15 @@ const Index = () => {
                     >
                       Get Started <ArrowRight className="ml-2" size={18} />
                     </Button>
+                    <Link to="/grade-calculator">
+                      <Button 
+                        size="lg" 
+                        className="text-lg"
+                        variant="outline"
+                      >
+                        I Already Have My Grades <Calculator className="ml-2" size={18} />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
