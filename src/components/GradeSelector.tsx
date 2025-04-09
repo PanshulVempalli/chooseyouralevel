@@ -41,14 +41,16 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
   // Ensure subjects is always an array and initialize availableSubjects
   const subjectsList = Array.isArray(subjects) ? subjects : [];
   
-  // Update available subjects whenever selectedGrades changes
+  // Initialize availableSubjects immediately and update whenever selectedGrades changes
   useEffect(() => {
-    // Filter out subjects that are already selected
-    const filtered = subjectsList.filter(
-      (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
-    );
-    setAvailableSubjects(filtered);
-  }, [selectedGrades]);
+    if (subjectsList.length > 0) {
+      // Filter out subjects that are already selected
+      const filtered = subjectsList.filter(
+        (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
+      );
+      setAvailableSubjects(filtered);
+    }
+  }, [selectedGrades, subjectsList]);
 
   const handleAddGrade = () => {
     if (selectedSubject) {
@@ -105,35 +107,44 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-full p-0">
-                  <Command>
-                    <CommandInput placeholder="Search subjects..." />
-                    <CommandEmpty>No subject found.</CommandEmpty>
-                    <CommandGroup className="max-h-64 overflow-y-auto">
-                      {availableSubjects && availableSubjects.length > 0 ? (
-                        availableSubjects.map((subject) => (
-                          <CommandItem
-                            key={subject.id}
-                            value={subject.id}
-                            onSelect={(value) => handleSelect(value)}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                selectedSubject === subject.id
-                                  ? "opacity-100"
-                                  : "opacity-0"
-                              )}
-                            />
-                            {subject.name}
+                  {/* Ensuring Command is not rendered with problematic data */}
+                  {subjectsList.length > 0 && (
+                    <Command>
+                      <CommandInput placeholder="Search subjects..." />
+                      <CommandEmpty>No subject found.</CommandEmpty>
+                      <CommandGroup className="max-h-64 overflow-y-auto">
+                        {availableSubjects && availableSubjects.length > 0 ? (
+                          availableSubjects.map((subject) => (
+                            <CommandItem
+                              key={subject.id}
+                              value={subject.id}
+                              onSelect={handleSelect}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  selectedSubject === subject.id
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {subject.name}
+                            </CommandItem>
+                          ))
+                        ) : (
+                          <CommandItem disabled>
+                            No more subjects available
                           </CommandItem>
-                        ))
-                      ) : (
-                        <CommandItem disabled>
-                          No more subjects available
-                        </CommandItem>
-                      )}
-                    </CommandGroup>
-                  </Command>
+                        )}
+                      </CommandGroup>
+                    </Command>
+                  )}
+                  {/* Fallback for when subjects aren't loaded */}
+                  {subjectsList.length === 0 && (
+                    <div className="p-2 text-sm text-center">
+                      Loading subjects...
+                    </div>
+                  )}
                 </PopoverContent>
               </Popover>
             </div>
