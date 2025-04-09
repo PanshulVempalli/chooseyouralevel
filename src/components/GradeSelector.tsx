@@ -37,6 +37,7 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<string>("A*");
 
+  // Ensure subjects is always an array
   const subjectsList = Array.isArray(subjects) ? subjects : [];
   
   // Filter out subjects that are already selected
@@ -105,8 +106,8 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
                         availableSubjects.map((subject) => (
                           <CommandItem
                             key={subject.id}
-                            onSelect={() => handleSelect(subject.id)}
                             value={subject.id}
+                            onSelect={() => handleSelect(subject.id)}
                           >
                             <Check
                               className={cn(
