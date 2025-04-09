@@ -105,8 +105,8 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
                         availableSubjects.map((subject) => (
                           <CommandItem
                             key={subject.id}
+                            onSelect={() => handleSelect(subject.id)}
                             value={subject.id}
-                            onSelect={handleSelect}
                           >
                             <Check
                               className={cn(
