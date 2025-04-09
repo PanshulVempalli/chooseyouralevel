@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,13 +18,9 @@ import {
 import { subjects } from "@/data/subjects";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SubjectGrade } from "@/utils/matchGrades";
 
 const grades = ["A*", "A", "B", "C", "D", "E", "U"];
-
-type SubjectGrade = {
-  subjectId: string;
-  grade: string;
-};
 
 interface GradeSelectorProps {
   selectedGrades: SubjectGrade[];
@@ -32,17 +28,21 @@ interface GradeSelectorProps {
   onSubmit: () => void;
 }
 
-const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSelectorProps) => {
+const GradeSelector: React.FC<GradeSelectorProps> = ({ 
+  selectedGrades, 
+  setSelectedGrades, 
+  onSubmit 
+}) => {
   const [open, setOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<string>("A*");
 
-  // Filter out subjects that are already selected - with added safety checks
-  const availableSubjects = subjects && Array.isArray(subjects) 
-    ? subjects.filter(
-        (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
-      )
-    : [];
+  const subjectsList = Array.isArray(subjects) ? subjects : [];
+  
+  // Filter out subjects that are already selected
+  const availableSubjects = subjectsList.filter(
+    (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
+  );
 
   const handleAddGrade = () => {
     if (selectedSubject) {
@@ -60,8 +60,8 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
   };
 
   const getSubjectName = (id: string) => {
-    if (!subjects || !Array.isArray(subjects)) return id;
-    const subject = subjects.find((s) => s.id === id);
+    if (!subjectsList.length) return id;
+    const subject = subjectsList.find((s) => s.id === id);
     return subject ? subject.name : id;
   };
 
@@ -101,12 +101,12 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
                     <CommandInput placeholder="Search subjects..." />
                     <CommandEmpty>No subject found.</CommandEmpty>
                     <CommandGroup className="max-h-64 overflow-y-auto">
-                      {availableSubjects && availableSubjects.length > 0 ? (
+                      {availableSubjects.length > 0 ? (
                         availableSubjects.map((subject) => (
                           <CommandItem
                             key={subject.id}
                             value={subject.id}
-                            onSelect={(currentValue) => handleSelect(currentValue)}
+                            onSelect={handleSelect}
                           >
                             <Check
                               className={cn(

@@ -79,13 +79,14 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
   }
   
   // For courses without specific requirements, check if they have the required subjects
-  const subjectMatchCount = course.subjects && Array.isArray(course.subjects) ? 
-    course.subjects.filter(subjectId => 
-      grades.some(sg => sg.subjectId === subjectId)
-    ).length : 0;
+  const courseSubjects = course.subjects && Array.isArray(course.subjects) ? course.subjects : [];
+  
+  const subjectMatchCount = courseSubjects.filter(subjectId => 
+    grades.some(sg => sg.subjectId === subjectId)
+  ).length;
   
   // Student needs to have at least some of the recommended subjects
-  return subjectMatchCount >= Math.min(2, course.subjects ? course.subjects.length : 0);
+  return subjectMatchCount >= Math.min(2, courseSubjects.length);
 };
 
 export const matchGradesToCourses = (

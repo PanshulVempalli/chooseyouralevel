@@ -17,7 +17,8 @@ const GradeCalculator = () => {
   const { toast } = useToast();
 
   const getSubjectName = (id: string) => {
-    const subject = subjects.find((s) => s.id === id);
+    const subjectsList = Array.isArray(subjects) ? subjects : [];
+    const subject = subjectsList.find((s) => s.id === id);
     return subject ? subject.name : id;
   };
 
@@ -31,11 +32,20 @@ const GradeCalculator = () => {
       return;
     }
 
-    const results = matchGradesToCourses(selectedGrades);
-    setMatchedCourses(results);
-    setShowResults(true);
+    try {
+      const results = matchGradesToCourses(selectedGrades);
+      setMatchedCourses(results);
+      setShowResults(true);
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      console.error("Error matching grades to courses:", error);
+      toast({
+        title: "Error finding matching courses",
+        description: "There was a problem processing your grades. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const resetResults = () => {
@@ -89,7 +99,7 @@ const GradeCalculator = () => {
                 </div>
               </div>
               
-              {matchedCourses.courses.length === 0 ? (
+              {!matchedCourses.courses || matchedCourses.courses.length === 0 ? (
                 <Card>
                   <CardContent className="pt-6 text-center">
                     <p className="mb-4">No matching courses found for your grades. Try selecting different subjects or consider courses with lower entry requirements.</p>

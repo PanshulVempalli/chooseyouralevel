@@ -109,15 +109,13 @@ const CommandSeparator = React.forwardRef<
 ))
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName
 
-// Fixed implementation to handle select events properly and safely
 const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
 >(({ className, onSelect, ...props }, ref) => {
-  // Ensure onSelect is properly handled
   const handleSelect = React.useCallback(
     (value: string) => {
-      if (onSelect && typeof value === 'string') {
+      if (onSelect && typeof value === "string") {
         onSelect(value);
       }
     },
@@ -135,7 +133,7 @@ const CommandItem = React.forwardRef<
       {...props}
     />
   );
-})
+});
 
 CommandItem.displayName = CommandPrimitive.Item.displayName
 
