@@ -1,26 +1,11 @@
 
-import React, { useState, useEffect } from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { subjects } from "@/data/subjects";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SubjectGrade } from "@/utils/matchGrades";
-
-const grades = ["A*", "A", "B", "C", "D", "E", "U"];
+import { subjects } from "@/data/subjects";
+import SubjectGradeSelector from "./SubjectGradeSelector";
 
 interface GradeSelectorProps {
   selectedGrades: SubjectGrade[];
@@ -33,51 +18,22 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
   setSelectedGrades, 
   onSubmit 
 }) => {
-  const [open, setOpen] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
-  const [selectedGrade, setSelectedGrade] = useState<string>("A*");
-  const [availableSubjects, setAvailableSubjects] = useState<typeof subjects>([]);
-
-  // Ensure subjects is always an array and initialize availableSubjects
-  const subjectsList = Array.isArray(subjects) ? subjects : [];
-  
-  // Initialize availableSubjects immediately and update whenever selectedGrades changes
-  useEffect(() => {
-    if (subjectsList.length > 0) {
-      // Filter out subjects that are already selected
-      const filtered = subjectsList.filter(
-        (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
-      );
-      setAvailableSubjects(filtered);
-    }
-  }, [selectedGrades, subjectsList]);
-
-  const handleAddGrade = () => {
-    if (selectedSubject) {
-      setSelectedGrades([
-        ...selectedGrades,
-        { subjectId: selectedSubject, grade: selectedGrade },
-      ]);
-      setSelectedSubject(null);
-      setSelectedGrade("A*");
-      // Close the popover after adding
-      setOpen(false);
-    }
-  };
-
-  const handleRemoveGrade = (subjectId: string) => {
-    setSelectedGrades(selectedGrades.filter((sg) => sg.subjectId !== subjectId));
-  };
-
+  // Helper function to get subject name by ID
   const getSubjectName = (id: string) => {
-    if (!subjectsList.length) return id;
+    const subjectsList = Array.isArray(subjects) ? subjects : [];
     const subject = subjectsList.find((s) => s.id === id);
     return subject ? subject.name : id;
   };
 
-  const handleSelect = (currentValue: string) => {
-    setSelectedSubject(currentValue);
-    setOpen(false);
+  const handleAddGrade = (subjectId: string, grade: string) => {
+    setSelectedGrades([
+      ...selectedGrades,
+      { subjectId, grade },
+    ]);
+  };
+
+  const handleRemoveGrade = (subjectId: string) => {
+    setSelectedGrades(selectedGrades.filter((sg) => sg.subjectId !== subjectId));
   };
 
   return (
@@ -87,94 +43,10 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Select Subject
-              </label>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-full justify-between"
-                  >
-                    {selectedSubject
-                      ? getSubjectName(selectedSubject)
-                      : "Select subject..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-full p-0">
-                  {/* Ensuring Command is not rendered with problematic data */}
-                  {subjectsList.length > 0 && (
-                    <Command>
-                      <CommandInput placeholder="Search subjects..." />
-                      <CommandEmpty>No subject found.</CommandEmpty>
-                      <CommandGroup className="max-h-64 overflow-y-auto">
-                        {availableSubjects && availableSubjects.length > 0 ? (
-                          availableSubjects.map((subject) => (
-                            <CommandItem
-                              key={subject.id}
-                              value={subject.id}
-                              onSelect={handleSelect}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  selectedSubject === subject.id
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {subject.name}
-                            </CommandItem>
-                          ))
-                        ) : (
-                          <CommandItem disabled>
-                            No more subjects available
-                          </CommandItem>
-                        )}
-                      </CommandGroup>
-                    </Command>
-                  )}
-                  {/* Fallback for when subjects aren't loaded */}
-                  {subjectsList.length === 0 && (
-                    <div className="p-2 text-sm text-center">
-                      Loading subjects...
-                    </div>
-                  )}
-                </PopoverContent>
-              </Popover>
-            </div>
-
-            <div>
-              <label className="text-sm font-medium mb-2 block">
-                Select Grade
-              </label>
-              <div className="flex space-x-2">
-                <select
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  value={selectedGrade}
-                  onChange={(e) => setSelectedGrade(e.target.value)}
-                >
-                  {grades.map((grade) => (
-                    <option key={grade} value={grade}>
-                      {grade}
-                    </option>
-                  ))}
-                </select>
-                <Button
-                  onClick={handleAddGrade}
-                  disabled={!selectedSubject}
-                  type="button"
-                >
-                  Add
-                </Button>
-              </div>
-            </div>
-          </div>
+          <SubjectGradeSelector 
+            selectedGrades={selectedGrades}
+            onAddGrade={handleAddGrade}
+          />
 
           <div className="space-y-3">
             <h3 className="text-sm font-medium">Selected Subjects & Grades:</h3>
