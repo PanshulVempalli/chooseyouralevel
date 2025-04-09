@@ -62,6 +62,11 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
     return subject ? subject.name : id;
   };
 
+  const handleSelect = (value: string) => {
+    setSelectedSubject(value);
+    setOpen(false);
+  };
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -93,26 +98,29 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
                     <CommandInput placeholder="Search subjects..." />
                     <CommandEmpty>No subject found.</CommandEmpty>
                     <CommandGroup className="max-h-64 overflow-y-auto">
-                      {availableSubjects.map((subject) => (
-                        <CommandItem
-                          key={subject.id}
-                          value={subject.id}
-                          onSelect={(currentValue) => {
-                            setSelectedSubject(currentValue);
-                            setOpen(false);
-                          }}
-                        >
-                          <Check
-                            className={cn(
-                              "mr-2 h-4 w-4",
-                              selectedSubject === subject.id
-                                ? "opacity-100"
-                                : "opacity-0"
-                            )}
-                          />
-                          {subject.name}
+                      {availableSubjects && availableSubjects.length > 0 ? (
+                        availableSubjects.map((subject) => (
+                          <CommandItem
+                            key={subject.id}
+                            value={subject.id}
+                            onSelect={handleSelect}
+                          >
+                            <Check
+                              className={cn(
+                                "mr-2 h-4 w-4",
+                                selectedSubject === subject.id
+                                  ? "opacity-100"
+                                  : "opacity-0"
+                              )}
+                            />
+                            {subject.name}
+                          </CommandItem>
+                        ))
+                      ) : (
+                        <CommandItem value="no-subjects" disabled>
+                          No more subjects available
                         </CommandItem>
-                      ))}
+                      )}
                     </CommandGroup>
                   </Command>
                 </PopoverContent>

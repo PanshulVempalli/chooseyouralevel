@@ -22,6 +22,10 @@ const gradeToPoints = (grade: string): number => {
 
 // Calculate UCAS points (simplified version)
 const calculateUcasPoints = (grades: SubjectGrade[]): number => {
+  if (!grades || !Array.isArray(grades) || grades.length === 0) {
+    return 0;
+  }
+  
   return grades.reduce((total, sg) => {
     return total + gradeToPoints(sg.grade) * 20; // Simplified UCAS points calculation
   }, 0);
@@ -29,6 +33,10 @@ const calculateUcasPoints = (grades: SubjectGrade[]): number => {
 
 // Check if the student meets the minimum grade requirements for a course
 const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean => {
+  if (!course || !grades || !Array.isArray(grades) || grades.length === 0) {
+    return false;
+  }
+  
   // For courses with specific grade requirements
   if (course.entryRequirements) {
     const entryReq = course.entryRequirements.toLowerCase();
@@ -83,16 +91,19 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
 export const matchGradesToCourses = (
   grades: SubjectGrade[]
 ): { courses: Course[], ucasPoints: number } => {
-  if (!grades || grades.length === 0) {
+  if (!grades || !Array.isArray(grades) || grades.length === 0) {
     return { courses: [], ucasPoints: 0 };
   }
 
   // Calculate UCAS points
   const ucasPoints = calculateUcasPoints(grades);
   
+  // Ensure universityDegrees is an array
+  const degreesToMatch = Array.isArray(universityDegrees) ? universityDegrees : [];
+  
   // Match courses based on subjects taken and grades achieved
-  const matchedCourses = universityDegrees.filter(course => 
-    meetsGradeRequirements(course, grades)
+  const matchedCourses = degreesToMatch.filter(course => 
+    course && meetsGradeRequirements(course, grades)
   );
 
   // Sort courses by university reputation (simplified for demo)
