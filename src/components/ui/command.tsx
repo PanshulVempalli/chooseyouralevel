@@ -109,15 +109,25 @@ const CommandSeparator = React.forwardRef<
 ))
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName
 
-// Fixed implementation to handle onSelect properly and avoid iteration issues
+// Fixed implementation to handle select events properly and safely
 const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
->(({ className, ...props }, ref) => {
-  // Using a new variable to safely destructure and pass the handler
+>(({ className, onSelect, ...props }, ref) => {
+  // Ensure onSelect is properly handled
+  const handleSelect = React.useCallback(
+    (value: string) => {
+      if (onSelect && typeof value === 'string') {
+        onSelect(value);
+      }
+    },
+    [onSelect]
+  );
+
   return (
     <CommandPrimitive.Item
       ref={ref}
+      onSelect={handleSelect}
       className={cn(
         "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled=true]:pointer-events-none data-[selected='true']:bg-accent data-[selected=true]:text-accent-foreground data-[disabled=true]:opacity-50",
         className

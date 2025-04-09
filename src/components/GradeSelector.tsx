@@ -37,10 +37,12 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<string>("A*");
 
-  // Filter out subjects that are already selected
-  const availableSubjects = subjects.filter(
-    (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
-  );
+  // Filter out subjects that are already selected - with added safety checks
+  const availableSubjects = subjects && Array.isArray(subjects) 
+    ? subjects.filter(
+        (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
+      )
+    : [];
 
   const handleAddGrade = () => {
     if (selectedSubject) {
@@ -58,6 +60,7 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
   };
 
   const getSubjectName = (id: string) => {
+    if (!subjects || !Array.isArray(subjects)) return id;
     const subject = subjects.find((s) => s.id === id);
     return subject ? subject.name : id;
   };
@@ -103,7 +106,7 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
                           <CommandItem
                             key={subject.id}
                             value={subject.id}
-                            onSelect={() => handleSelect(subject.id)}
+                            onSelect={(currentValue) => handleSelect(currentValue)}
                           >
                             <Check
                               className={cn(
