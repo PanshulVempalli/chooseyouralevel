@@ -41,52 +41,83 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
   if (course.entryRequirements) {
     const entryReq = course.entryRequirements.toLowerCase();
     
-    // Check for required subjects and minimum grades
-    let hasRequiredGrades = true;
+    // Count grades by level
+    const gradeCount = {
+      astar: grades.filter(sg => sg.grade === "A*").length,
+      a: grades.filter(sg => sg.grade === "A").length,
+      b: grades.filter(sg => sg.grade === "B").length,
+      c: grades.filter(sg => sg.grade === "C").length,
+      d: grades.filter(sg => sg.grade === "D").length,
+      e: grades.filter(sg => sg.grade === "E").length
+    };
     
-    // Example requirements parsing (simplified)
-    // Check for top grades like "AAA" or "A*AA"
+    const totalPoints = calculateUcasPoints(grades);
+    
+    // Check for top tier universities (Oxford, Cambridge, etc.)
     if (entryReq.includes("a*a*a*") || entryReq.includes("a*a*a")) {
-      // Count how many A* and A grades the student has
-      const topGrades = grades.filter(sg => sg.grade === "A*" || sg.grade === "A").length;
-      if (topGrades < 3) return false;
+      if (gradeCount.astar < 2) return false;
+      if (gradeCount.astar + gradeCount.a < 3) return false;
     }
     else if (entryReq.includes("aaa") || entryReq.includes("aab")) {
-      // Count how many A and B grades the student has
-      const goodGrades = grades.filter(sg => sg.grade === "A*" || sg.grade === "A" || sg.grade === "B").length;
-      if (goodGrades < 3) return false;
+      if (gradeCount.a + gradeCount.astar < 2) return false;
+      if (gradeCount.astar + gradeCount.a + gradeCount.b < 3) return false;
     }
+    // Add more inclusive checks for average grades
     else if (entryReq.includes("bbb") || entryReq.includes("bbc")) {
-      // Count how many B and C grades the student has
-      const moderateGrades = grades.filter(sg => 
-        sg.grade === "A*" || sg.grade === "A" || sg.grade === "B" || sg.grade === "C").length;
-      if (moderateGrades < 3) return false;
+      if (gradeCount.b + gradeCount.a + gradeCount.astar < 2) return false;
+    }
+    else if (entryReq.includes("ccc") || entryReq.includes("ccd")) {
+      if (gradeCount.c + gradeCount.b + gradeCount.a + gradeCount.astar < 2) return false;
+    }
+    // For entry requirements with just minimum UCAS points
+    else if (entryReq.includes("ucas") || entryReq.includes("points")) {
+      // Extract the required points if available
+      const pointsMatch = entryReq.match(/(\d+)\s*(?:points|ucas)/i);
+      if (pointsMatch && pointsMatch[1]) {
+        const requiredPoints = parseInt(pointsMatch[1], 10);
+        if (totalPoints < requiredPoints) return false;
+      }
     }
     
-    // Check for subject-specific requirements
-    // This is simplified; a real implementation would parse requirements more thoroughly
-    if (course.subjects && Array.isArray(course.subjects)) {
-      course.subjects.forEach(subjectId => {
-        const subjectGrade = grades.find(sg => sg.subjectId === subjectId);
-        if (!subjectGrade) {
-          // Required subject not taken
-          hasRequiredGrades = false;
-        }
-      });
+    // Check for subject-specific requirements if specified
+    if (course.subjects && Array.isArray(course.subjects) && course.subjects.length > 0) {
+      const matchedSubjects = course.subjects.filter(subjectId => 
+        grades.some(sg => sg.subjectId === subjectId)
+      ).length;
+      
+      // For higher demanding courses, require more subject matches
+      if (entryReq.includes("a*") || entryReq.includes("aaa")) {
+        if (matchedSubjects < Math.ceil(course.subjects.length * 0.75)) return false;
+      } 
+      // For average courses, be more lenient with subject matching
+      else {
+        if (matchedSubjects < Math.ceil(course.subjects.length * 0.5)) return false;
+      }
     }
     
-    return hasRequiredGrades;
+    return true;
   }
   
-  // For courses without specific requirements, check if they have the required subjects
-  const courseSubjects = course.subjects && Array.isArray(course.subjects) ? course.subjects : [];
+  // For courses without specific requirements, be more inclusive
+  const avgGradePoints = grades.reduce((sum, sg) => sum + gradeToPoints(sg.grade), 0) / grades.length;
   
-  const subjectMatchCount = courseSubjects.filter(subjectId => 
-    grades.some(sg => sg.subjectId === subjectId)
-  ).length;
+  // Match courses based on average grade points
+  // Lower-tier courses accept average grades of C (3 points) and above
+  if (avgGradePoints >= 3) {
+    const courseSubjects = course.subjects && Array.isArray(course.subjects) ? course.subjects : [];
+    
+    // More lenient subject matching for average grades
+    if (courseSubjects.length === 0) return true;
+    
+    const subjectMatchCount = courseSubjects.filter(subjectId => 
+      grades.some(sg => sg.subjectId === subjectId)
+    ).length;
+    
+    // Student needs to have at least some of the recommended subjects
+    return subjectMatchCount >= Math.min(1, courseSubjects.length);
+  }
   
-  // Student needs to have at least some of the recommended subjects
-  return subjectMatchCount >= Math.min(2, courseSubjects.length);
+  return false;
 };
 
 export const matchGradesToCourses = (
@@ -107,17 +138,36 @@ export const matchGradesToCourses = (
     course && meetsGradeRequirements(course, grades)
   );
 
-  // Sort courses by university reputation (simplified for demo)
+  // Sort courses by relevance to student's grades
   const sortedCourses = [...matchedCourses].sort((a, b) => {
-    // Prioritize better-known universities (simplified example)
     const aUniversity = a.university?.toLowerCase() || "";
     const bUniversity = b.university?.toLowerCase() || "";
     
-    // Sort by university name as a proxy for reputation (just for demo purposes)
-    if (aUniversity.includes("oxford") || aUniversity.includes("cambridge")) return -1;
-    if (bUniversity.includes("oxford") || bUniversity.includes("cambridge")) return 1;
-    if (aUniversity.includes("imperial") || aUniversity.includes("lse")) return -1;
-    if (bUniversity.includes("imperial") || bUniversity.includes("lse")) return 1;
+    // Calculate average grade value for student
+    const avgGradePoints = grades.reduce((sum, sg) => sum + gradeToPoints(sg.grade), 0) / grades.length;
+    
+    // For high achieving students (A*/A average)
+    if (avgGradePoints >= 5) {
+      // Prioritize prestigious universities
+      if (aUniversity.includes("oxford") || aUniversity.includes("cambridge")) return -1;
+      if (bUniversity.includes("oxford") || bUniversity.includes("cambridge")) return 1;
+      if (aUniversity.includes("imperial") || aUniversity.includes("lse")) return -1;
+      if (bUniversity.includes("imperial") || bUniversity.includes("lse")) return 1;
+    }
+    // For good students (B average)
+    else if (avgGradePoints >= 4) {
+      // Prioritize good universities but not necessarily the most prestigious
+      if ((aUniversity.includes("russell") || aUniversity.includes("university of")) && 
+          !(bUniversity.includes("russell") || bUniversity.includes("university of"))) return -1;
+      if (!(aUniversity.includes("russell") || aUniversity.includes("university of")) && 
+          (bUniversity.includes("russell") || bUniversity.includes("university of"))) return 1;
+    }
+    // For average students (C average)
+    else {
+      // Prioritize more accessible institutions
+      if (aUniversity.includes("college") && !bUniversity.includes("college")) return -1;
+      if (!aUniversity.includes("college") && bUniversity.includes("college")) return 1;
+    }
     
     return 0;
   });

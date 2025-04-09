@@ -5,10 +5,11 @@ import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { BookOpen, ArrowLeft } from "lucide-react";
+import { BookOpen, ArrowLeft, GraduationCap, Building } from "lucide-react";
 import GradeSelector from "@/components/GradeSelector";
 import { matchGradesToCourses, SubjectGrade } from "@/utils/matchGrades";
 import { subjects } from "@/data/subjects";
+import { Badge } from "@/components/ui/badge";
 
 const GradeCalculator = () => {
   const [selectedGrades, setSelectedGrades] = useState<SubjectGrade[]>([]);
@@ -20,6 +21,36 @@ const GradeCalculator = () => {
     const subjectsList = Array.isArray(subjects) ? subjects : [];
     const subject = subjectsList.find((s) => s.id === id);
     return subject ? subject.name : id;
+  };
+
+  // New function to get institution type based on university name
+  const getInstitutionType = (universityName: string): string => {
+    const name = universityName.toLowerCase();
+    if (name.includes("oxford") || name.includes("cambridge") || 
+        name.includes("imperial") || name.includes("lse")) {
+      return "Top-tier University";
+    } else if (name.includes("university")) {
+      return "University";
+    } else if (name.includes("college")) {
+      return "College";
+    } else {
+      return "Institution";
+    }
+  };
+
+  // New function to get appropriate color for institution badge
+  const getInstitutionColor = (universityName: string): string => {
+    const name = universityName.toLowerCase();
+    if (name.includes("oxford") || name.includes("cambridge") || 
+        name.includes("imperial") || name.includes("lse")) {
+      return "bg-yellow-50 text-yellow-800 ring-yellow-600/20";
+    } else if (name.includes("university")) {
+      return "bg-blue-50 text-blue-800 ring-blue-600/20";
+    } else if (name.includes("college")) {
+      return "bg-green-50 text-green-800 ring-green-600/20";
+    } else {
+      return "bg-slate-50 text-slate-800 ring-slate-600/20";
+    }
   };
 
   const handleFindCourses = () => {
@@ -115,7 +146,16 @@ const GradeCalculator = () => {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
                             <div>
                               <h2 className="text-xl font-semibold">{course.name}</h2>
-                              <p className="text-muted-foreground">{course.university || "University Degree"}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                <Building className="h-4 w-4 text-muted-foreground" />
+                                <p className="text-muted-foreground">{course.university || "University Degree"}</p>
+                                <Badge 
+                                  variant="outline" 
+                                  className={`ml-2 ${getInstitutionColor(course.university || "")}`}
+                                >
+                                  {getInstitutionType(course.university || "")}
+                                </Badge>
+                              </div>
                             </div>
                             <div className="mt-2 sm:mt-0">
                               <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
@@ -131,6 +171,26 @@ const GradeCalculator = () => {
                               <span className="font-medium">Entry Requirements:</span> {course.entryRequirements || "Grades vary by university"}
                             </div>
                           </div>
+                          
+                          {course.subjects && course.subjects.length > 0 && (
+                            <div className="mt-3 text-sm">
+                              <span className="font-medium">Required/Recommended Subjects:</span>
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {course.subjects.map((subjectId: string) => {
+                                  const isStudied = selectedGrades.some(sg => sg.subjectId === subjectId);
+                                  return (
+                                    <Badge 
+                                      key={subjectId}
+                                      variant={isStudied ? "default" : "outline"}
+                                      className={isStudied ? "bg-education-primary" : ""}
+                                    >
+                                      {getSubjectName(subjectId)}
+                                    </Badge>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>
