@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -36,14 +36,19 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
   const [open, setOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   const [selectedGrade, setSelectedGrade] = useState<string>("A*");
+  const [availableSubjects, setAvailableSubjects] = useState<typeof subjects>([]);
 
-  // Ensure subjects is always an array
+  // Ensure subjects is always an array and initialize availableSubjects
   const subjectsList = Array.isArray(subjects) ? subjects : [];
   
-  // Filter out subjects that are already selected
-  const availableSubjects = subjectsList.filter(
-    (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
-  );
+  // Update available subjects whenever selectedGrades changes
+  useEffect(() => {
+    // Filter out subjects that are already selected
+    const filtered = subjectsList.filter(
+      (subject) => !selectedGrades.some((sg) => sg.subjectId === subject.id)
+    );
+    setAvailableSubjects(filtered);
+  }, [selectedGrades]);
 
   const handleAddGrade = () => {
     if (selectedSubject) {
@@ -53,6 +58,8 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
       ]);
       setSelectedSubject(null);
       setSelectedGrade("A*");
+      // Close the popover after adding
+      setOpen(false);
     }
   };
 
@@ -102,12 +109,12 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
                     <CommandInput placeholder="Search subjects..." />
                     <CommandEmpty>No subject found.</CommandEmpty>
                     <CommandGroup className="max-h-64 overflow-y-auto">
-                      {availableSubjects.length > 0 ? (
+                      {availableSubjects && availableSubjects.length > 0 ? (
                         availableSubjects.map((subject) => (
                           <CommandItem
                             key={subject.id}
                             value={subject.id}
-                            onSelect={() => handleSelect(subject.id)}
+                            onSelect={(value) => handleSelect(value)}
                           >
                             <Check
                               className={cn(
