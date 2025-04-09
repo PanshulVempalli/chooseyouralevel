@@ -109,13 +109,11 @@ const CommandSeparator = React.forwardRef<
 ))
 CommandSeparator.displayName = CommandPrimitive.Separator.displayName
 
+// Fixed the CommandItem to correctly handle the onSelect function
 const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
-    // Add an optional onSelect prop with proper typing
-    onSelect?: (value: string) => void;
-  }
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
+>(({ className, onSelect, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
     className={cn(

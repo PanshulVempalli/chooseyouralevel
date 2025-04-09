@@ -62,8 +62,8 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
     return subject ? subject.name : id;
   };
 
-  const handleSelect = (value: string) => {
-    setSelectedSubject(value);
+  const handleSelect = (currentValue: string) => {
+    setSelectedSubject(currentValue);
     setOpen(false);
   };
 
@@ -103,7 +103,7 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
                           <CommandItem
                             key={subject.id}
                             value={subject.id}
-                            onSelect={handleSelect}
+                            onSelect={() => handleSelect(subject.id)}
                           >
                             <Check
                               className={cn(
@@ -117,7 +117,7 @@ const GradeSelector = ({ selectedGrades, setSelectedGrades, onSubmit }: GradeSel
                           </CommandItem>
                         ))
                       ) : (
-                        <CommandItem value="no-subjects" disabled>
+                        <CommandItem disabled>
                           No more subjects available
                         </CommandItem>
                       )}
