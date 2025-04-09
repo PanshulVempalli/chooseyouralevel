@@ -57,24 +57,27 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
     
     // Check for subject-specific requirements
     // This is simplified; a real implementation would parse requirements more thoroughly
-    course.subjects.forEach(subjectId => {
-      const subjectGrade = grades.find(sg => sg.subjectId === subjectId);
-      if (!subjectGrade) {
-        // Required subject not taken
-        hasRequiredGrades = false;
-      }
-    });
+    if (course.subjects && Array.isArray(course.subjects)) {
+      course.subjects.forEach(subjectId => {
+        const subjectGrade = grades.find(sg => sg.subjectId === subjectId);
+        if (!subjectGrade) {
+          // Required subject not taken
+          hasRequiredGrades = false;
+        }
+      });
+    }
     
     return hasRequiredGrades;
   }
   
   // For courses without specific requirements, check if they have the required subjects
-  const subjectMatchCount = course.subjects.filter(subjectId => 
-    grades.some(sg => sg.subjectId === subjectId)
-  ).length;
+  const subjectMatchCount = course.subjects && Array.isArray(course.subjects) ? 
+    course.subjects.filter(subjectId => 
+      grades.some(sg => sg.subjectId === subjectId)
+    ).length : 0;
   
   // Student needs to have at least some of the recommended subjects
-  return subjectMatchCount >= Math.min(2, course.subjects.length);
+  return subjectMatchCount >= Math.min(2, course.subjects ? course.subjects.length : 0);
 };
 
 export const matchGradesToCourses = (

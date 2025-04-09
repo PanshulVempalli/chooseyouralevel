@@ -8,11 +8,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { BookOpen, ArrowLeft } from "lucide-react";
 import GradeSelector from "@/components/GradeSelector";
 import { matchGradesToCourses, SubjectGrade } from "@/utils/matchGrades";
+import { subjects } from "@/data/subjects";
 
 const GradeCalculator = () => {
   const [selectedGrades, setSelectedGrades] = useState<SubjectGrade[]>([]);
   const [showResults, setShowResults] = useState(false);
-  const [matchedCourses, setMatchedCourses] = useState<any>({ courses: [], ucasPoints: 0 });
+  const [matchedCourses, setMatchedCourses] = useState<{ courses: any[], ucasPoints: number }>({ courses: [], ucasPoints: 0 });
   const { toast } = useToast();
 
   const getSubjectName = (id: string) => {
@@ -136,5 +137,4 @@ const GradeCalculator = () => {
   );
 };
 
-import { subjects } from "@/data/subjects";
 export default GradeCalculator;
