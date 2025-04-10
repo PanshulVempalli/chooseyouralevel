@@ -1,10 +1,15 @@
-
 import { Course } from "../data/careers";
 import { universityDegrees } from "../data/careers";
 
 export type SubjectGrade = {
   subjectId: string;
   grade: string;
+};
+
+export type ExtraCurricular = {
+  activityId: string;
+  name: string;
+  pointsValue: number;
 };
 
 // Function to convert grade to numerical value for comparison
@@ -20,8 +25,8 @@ const gradeToPoints = (grade: string): number => {
   }
 };
 
-// Calculate UCAS points (simplified version)
-const calculateUcasPoints = (grades: SubjectGrade[]): number => {
+// Calculate UCAS points from A-level grades
+const calculateGradeUcasPoints = (grades: SubjectGrade[]): number => {
   if (!grades || !Array.isArray(grades) || grades.length === 0) {
     return 0;
   }
@@ -29,6 +34,19 @@ const calculateUcasPoints = (grades: SubjectGrade[]): number => {
   return grades.reduce((total, sg) => {
     return total + gradeToPoints(sg.grade) * 20; // Simplified UCAS points calculation
   }, 0);
+};
+
+// Calculate total UCAS points including extracurricular activities
+const calculateTotalUcasPoints = (
+  grades: SubjectGrade[], 
+  extraActivities: ExtraCurricular[]
+): number => {
+  const gradePoints = calculateGradeUcasPoints(grades);
+  const extraPoints = extraActivities.reduce((total, activity) => {
+    return total + activity.pointsValue;
+  }, 0);
+  
+  return gradePoints + extraPoints;
 };
 
 // Check if the student meets the minimum grade requirements for a course
@@ -51,7 +69,7 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
       e: grades.filter(sg => sg.grade === "E").length
     };
     
-    const totalPoints = calculateUcasPoints(grades);
+    const totalPoints = calculateGradeUcasPoints(grades);
     
     // More strict checks for universities with high requirements
     
@@ -173,14 +191,15 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
 };
 
 export const matchGradesToCourses = (
-  grades: SubjectGrade[]
+  grades: SubjectGrade[],
+  extraActivities: ExtraCurricular[] = []
 ): { courses: Course[], ucasPoints: number } => {
   if (!grades || !Array.isArray(grades) || grades.length === 0) {
     return { courses: [], ucasPoints: 0 };
   }
 
-  // Calculate UCAS points
-  const ucasPoints = calculateUcasPoints(grades);
+  // Calculate total UCAS points including extracurricular activities
+  const ucasPoints = calculateTotalUcasPoints(grades, extraActivities);
   
   // Ensure universityDegrees is an array
   const degreesToMatch = Array.isArray(universityDegrees) ? universityDegrees : [];

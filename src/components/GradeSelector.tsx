@@ -1,6 +1,5 @@
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SubjectGrade } from "@/utils/matchGrades";
@@ -10,13 +9,13 @@ import SubjectGradeSelector from "./SubjectGradeSelector";
 interface GradeSelectorProps {
   selectedGrades: SubjectGrade[];
   setSelectedGrades: (grades: SubjectGrade[]) => void;
-  onSubmit: () => void;
+  onSubmit?: () => void;
 }
 
 const GradeSelector: React.FC<GradeSelectorProps> = ({ 
   selectedGrades, 
-  setSelectedGrades, 
-  onSubmit 
+  setSelectedGrades,
+  onSubmit
 }) => {
   // Helper function to get subject name by ID
   const getSubjectName = (id: string) => {
@@ -63,29 +62,19 @@ const GradeSelector: React.FC<GradeSelectorProps> = ({
                     variant="secondary"
                   >
                     {getSubjectName(sg.subjectId)}: {sg.grade}
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-4 w-4 p-0 rounded-full"
+                    <button
+                      type="button"
+                      className="ml-1 h-4 w-4 rounded-full inline-flex items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground"
                       onClick={() => handleRemoveGrade(sg.subjectId)}
                     >
                       ×
-                    </Button>
+                    </button>
                   </Badge>
                 ))}
               </div>
             )}
           </div>
         </div>
-
-        <Button
-          className="w-full"
-          size="lg"
-          onClick={onSubmit}
-          disabled={selectedGrades.length < 3}
-        >
-          Find Matching University Courses
-        </Button>
       </CardContent>
     </Card>
   );
