@@ -53,21 +53,51 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
     
     const totalPoints = calculateUcasPoints(grades);
     
-    // Check for top tier universities (Oxford, Cambridge, etc.)
-    if (entryReq.includes("a*a*a*") || entryReq.includes("a*a*a")) {
-      if (gradeCount.astar < 2) return false;
-      if (gradeCount.astar + gradeCount.a < 3) return false;
+    // More strict checks for universities with high requirements
+    
+    // Check for Oxford, Cambridge, etc. requiring A*A*A* or A*A*A
+    if (entryReq.includes("a*a*a*")) {
+      return gradeCount.astar >= 3;
     }
-    else if (entryReq.includes("aaa") || entryReq.includes("aab")) {
-      if (gradeCount.a + gradeCount.astar < 2) return false;
-      if (gradeCount.astar + gradeCount.a + gradeCount.b < 3) return false;
+    else if (entryReq.includes("a*a*a")) {
+      return gradeCount.astar >= 2 && (gradeCount.astar + gradeCount.a) >= 3;
     }
-    // Add more inclusive checks for average grades
-    else if (entryReq.includes("bbb") || entryReq.includes("bbc")) {
-      if (gradeCount.b + gradeCount.a + gradeCount.astar < 2) return false;
+    // Check for AAA requirements
+    else if (entryReq.includes("aaa") && !entryReq.includes("aab")) {
+      return (gradeCount.a + gradeCount.astar) >= 3;
     }
-    else if (entryReq.includes("ccc") || entryReq.includes("ccd")) {
-      if (gradeCount.c + gradeCount.b + gradeCount.a + gradeCount.astar < 2) return false;
+    // Check for AAB requirements
+    else if (entryReq.includes("aab")) {
+      return (gradeCount.a + gradeCount.astar) >= 2 && 
+             (gradeCount.a + gradeCount.astar + gradeCount.b) >= 3;
+    }
+    // Check for ABB requirements
+    else if (entryReq.includes("abb")) {
+      return (gradeCount.a + gradeCount.astar) >= 1 && 
+             (gradeCount.a + gradeCount.astar + gradeCount.b) >= 3 &&
+             gradeCount.b >= 1;
+    }
+    // Check for BBB requirements
+    else if (entryReq.includes("bbb")) {
+      return gradeCount.b >= 3 || 
+            ((gradeCount.b + gradeCount.a + gradeCount.astar) >= 3 && 
+             (gradeCount.a + gradeCount.astar + gradeCount.b) >= gradeCount.c);
+    }
+    // Check for BBC requirements
+    else if (entryReq.includes("bbc")) {
+      return gradeCount.b >= 2 && 
+             (gradeCount.b + gradeCount.c + gradeCount.a + gradeCount.astar) >= 3;
+    }
+    // Check for CCC requirements
+    else if (entryReq.includes("ccc")) {
+      return gradeCount.c >= 3 || 
+            ((gradeCount.c + gradeCount.b + gradeCount.a + gradeCount.astar) >= 3 && 
+             (gradeCount.b + gradeCount.a + gradeCount.astar) >= 1);
+    }
+    // Check for CCD requirements
+    else if (entryReq.includes("ccd")) {
+      return gradeCount.c >= 2 && 
+             (gradeCount.c + gradeCount.d + gradeCount.b + gradeCount.a + gradeCount.astar) >= 3;
     }
     // For entry requirements with just minimum UCAS points
     else if (entryReq.includes("ucas") || entryReq.includes("points")) {
@@ -75,9 +105,12 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
       const pointsMatch = entryReq.match(/(\d+)\s*(?:points|ucas)/i);
       if (pointsMatch && pointsMatch[1]) {
         const requiredPoints = parseInt(pointsMatch[1], 10);
-        if (totalPoints < requiredPoints) return false;
+        return totalPoints >= requiredPoints;
       }
     }
+    
+    // If no specific grade pattern matched, check average grade point
+    const avgGradePoints = grades.reduce((sum, sg) => sum + gradeToPoints(sg.grade), 0) / grades.length;
     
     // Check for subject-specific requirements if specified
     if (course.subjects && Array.isArray(course.subjects) && course.subjects.length > 0) {
@@ -87,15 +120,34 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
       
       // For higher demanding courses, require more subject matches
       if (entryReq.includes("a*") || entryReq.includes("aaa")) {
-        if (matchedSubjects < Math.ceil(course.subjects.length * 0.75)) return false;
+        if (avgGradePoints < 5 || matchedSubjects < Math.ceil(course.subjects.length * 0.75)) {
+          return false;
+        }
       } 
       // For average courses, be more lenient with subject matching
+      else if (entryReq.includes("bbb") || entryReq.includes("bbc")) {
+        if (avgGradePoints < 4 || matchedSubjects < Math.ceil(course.subjects.length * 0.5)) {
+          return false;
+        }
+      }
+      // For lower entry requirement courses
       else {
-        if (matchedSubjects < Math.ceil(course.subjects.length * 0.5)) return false;
+        if (avgGradePoints < 3 || matchedSubjects < Math.ceil(course.subjects.length * 0.3)) {
+          return false;
+        }
       }
     }
     
-    return true;
+    // If it's a high requirement course, ensure average grade is sufficient
+    if (entryReq.includes("a*") || entryReq.includes("aaa")) {
+      return avgGradePoints >= 5;
+    } 
+    // For mid-tier requirements
+    else if (entryReq.includes("bbb") || entryReq.includes("abb")) {
+      return avgGradePoints >= 4;
+    }
+    
+    return avgGradePoints >= 3;
   }
   
   // For courses without specific requirements, be more inclusive
