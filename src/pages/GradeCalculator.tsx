@@ -1,23 +1,44 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { BookOpen, ArrowLeft, GraduationCap, Building, Award, CheckCircle2, AlertCircle } from "lucide-react";
+import { BookOpen, ArrowLeft, GraduationCap, Building, Award, CheckCircle2, AlertCircle, Globe } from "lucide-react";
 import GradeSelector from "@/components/GradeSelector";
 import { matchGradesToCourses, SubjectGrade, ExtraCurricular } from "@/utils/matchGrades";
 import { subjects } from "@/data/subjects";
 import { Badge } from "@/components/ui/badge";
 import ExtraCurricularSelector from "@/components/ExtraCurricularSelector";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const GradeCalculator = () => {
   const [selectedGrades, setSelectedGrades] = useState<SubjectGrade[]>([]);
   const [extraActivities, setExtraActivities] = useState<ExtraCurricular[]>([]);
+  const [regionPreference, setRegionPreference] = useState<string>("");
   const [showResults, setShowResults] = useState(false);
   const [matchedCourses, setMatchedCourses] = useState<{ courses: any[], ucasPoints: number }>({ courses: [], ucasPoints: 0 });
   const { toast } = useToast();
+
+  const regions = [
+    { value: "", label: "No preference" },
+    { value: "UK", label: "United Kingdom (all)" },
+    { value: "London, UK", label: "London" },
+    { value: "Oxbridge, UK", label: "Oxford & Cambridge" },
+    { value: "Scotland, UK", label: "Scotland" },
+    { value: "Northern England, UK", label: "Northern England" },
+    { value: "Midlands, UK", label: "Midlands" },
+    { value: "Southern England, UK", label: "Southern England" },
+    { value: "Wales, UK", label: "Wales" },
+    { value: "Northern Ireland, UK", label: "Northern Ireland" },
+    { value: "USA", label: "United States" },
+    { value: "Canada", label: "Canada" },
+    { value: "Continental Europe", label: "Europe" },
+    { value: "Australia/New Zealand", label: "Australia/New Zealand" },
+    { value: "East Asia", label: "East Asia" },
+    { value: "Other", label: "Other international" },
+  ];
 
   const getSubjectName = (id: string) => {
     const subjectsList = Array.isArray(subjects) ? subjects : [];
@@ -64,7 +85,7 @@ const GradeCalculator = () => {
     }
 
     try {
-      const results = matchGradesToCourses(selectedGrades, extraActivities);
+      const results = matchGradesToCourses(selectedGrades, extraActivities, regionPreference);
       setMatchedCourses(results);
       setShowResults(true);
 
@@ -88,12 +109,10 @@ const GradeCalculator = () => {
     return extraActivities.reduce((total, activity) => total + activity.pointsValue, 0);
   };
 
-  // Check if student has required subject with minimum grade
   const hasRequiredSubject = (requiredSubject: { id: string, minGrade: string }) => {
     const studentGrade = selectedGrades.find(sg => sg.subjectId === requiredSubject.id);
     if (!studentGrade) return false;
     
-    // Convert grades to points for comparison
     const gradeToPoints = (grade: string): number => {
       switch (grade) {
         case "A*": return 6;
@@ -107,6 +126,20 @@ const GradeCalculator = () => {
     };
     
     return gradeToPoints(studentGrade.grade) >= gradeToPoints(requiredSubject.minGrade);
+  };
+
+  const getUniversityRegion = (universityName: string): string => {
+    const name = universityName.toLowerCase();
+    if (name.includes("oxford") || name.includes("cambridge") || 
+        name.includes("imperial") || name.includes("lse")) {
+      return "Oxbridge, UK";
+    } else if (name.includes("university")) {
+      return "University";
+    } else if (name.includes("college")) {
+      return "College";
+    } else {
+      return "Institution";
+    }
   };
 
   return (
@@ -139,6 +172,41 @@ const GradeCalculator = () => {
                       selectedActivities={extraActivities}
                       setSelectedActivities={setExtraActivities}
                     />
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="mb-4">
+                      <div className="flex items-center mb-2">
+                        <Globe className="mr-2 h-5 w-5 text-education-primary" />
+                        <h3 className="font-medium text-lg">Location Preferences</h3>
+                      </div>
+                      <p className="text-muted-foreground text-sm mb-4">
+                        Select your preferred region to find universities that match your grades in that area
+                      </p>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="region">Preferred Region</Label>
+                          <Select
+                            value={regionPreference}
+                            onValueChange={setRegionPreference}
+                          >
+                            <SelectTrigger id="region" className="w-full">
+                              <SelectValue placeholder="Select a region (optional)" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {regions.map((region) => (
+                                <SelectItem key={region.value} value={region.value}>
+                                  {region.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
                 
@@ -187,6 +255,14 @@ const GradeCalculator = () => {
                       <span className="text-muted-foreground">Total UCAS Points:</span> {matchedCourses.ucasPoints}
                     </div>
                   </div>
+                  {regionPreference && (
+                    <div className="mt-2">
+                      <Badge variant="outline" className="bg-blue-50 text-blue-800">
+                        <Globe className="mr-1 h-3 w-3" /> 
+                        Region: {regions.find(r => r.value === regionPreference)?.label || regionPreference}
+                      </Badge>
+                    </div>
+                  )}
                 </div>
               </div>
               
@@ -229,6 +305,12 @@ const GradeCalculator = () => {
                           <div className="flex flex-col sm:flex-row justify-between text-sm">
                             <div>
                               <span className="font-medium">Entry Requirements:</span> {course.entryRequirements || "Grades vary by university"}
+                            </div>
+                            <div className="mt-2 sm:mt-0">
+                              <span className="font-medium flex items-center">
+                                <Globe className="h-3 w-3 mr-1 text-blue-500" />
+                                Region: {getUniversityRegion(course.university || "")}
+                              </span>
                             </div>
                           </div>
                           

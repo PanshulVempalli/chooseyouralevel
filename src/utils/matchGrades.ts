@@ -52,7 +52,7 @@ const calculateTotalUcasPoints = (
 
 // Check if student has the required subjects with minimum grades
 const hasRequiredSubjects = (course: Course, grades: SubjectGrade[]): boolean => {
-  if (!course || !course.requiredSubjects || course.requiredSubjects.length === 0) {
+  if (!course.requiredSubjects || course.requiredSubjects.length === 0) {
     return true; // No required subjects specified
   }
   
@@ -207,9 +207,89 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
   return false;
 };
 
+// Determine the region of a university
+const getUniversityRegion = (universityName: string): string => {
+  const name = universityName ? universityName.toLowerCase() : "";
+  
+  // UK regions
+  if (name.includes("london") || name.includes("imperial") || name.includes("ucl") || name.includes("kings college") || name.includes("lse")) {
+    return "London, UK";
+  } else if (name.includes("oxford") || name.includes("cambridge")) {
+    return "Oxbridge, UK";
+  } else if (name.includes("edinburgh") || name.includes("glasgow") || name.includes("st andrews")) {
+    return "Scotland, UK";
+  } else if (name.includes("cardiff") || name.includes("swansea")) {
+    return "Wales, UK";
+  } else if (name.includes("belfast") || name.includes("ulster")) {
+    return "Northern Ireland, UK";
+  } else if (name.includes("manchester") || name.includes("liverpool") || name.includes("leeds") || name.includes("sheffield") || name.includes("newcastle")) {
+    return "Northern England, UK";
+  } else if (name.includes("birmingham") || name.includes("nottingham") || name.includes("leicester") || name.includes("warwick")) {
+    return "Midlands, UK";
+  } else if (name.includes("bristol") || name.includes("exeter") || name.includes("bath") || name.includes("southampton")) {
+    return "Southern England, UK";
+  } 
+  // International regions
+  else if (name.includes("harvard") || name.includes("princeton") || name.includes("yale") || name.includes("stanford") || name.includes("mit")) {
+    return "USA - Ivy League/Top Tier";
+  } else if (name.includes("sorbonne") || name.includes("heidelberg") || name.includes("bologna")) {
+    return "Continental Europe";
+  } else if (name.includes("toronto") || name.includes("mcgill") || name.includes("ubc")) {
+    return "Canada";
+  } else if (name.includes("sydney") || name.includes("melbourne") || name.includes("auckland")) {
+    return "Australia/New Zealand";
+  } else if (name.includes("singapore") || name.includes("hong kong") || name.includes("tokyo")) {
+    return "East Asia";
+  }
+  
+  // Default for UK universities
+  if (name.includes("university") && !name.includes("college") && !name.includes("school")) {
+    return "UK";
+  }
+  
+  return "Other";
+};
+
+// Function to get university tier based on entry requirements
+const getUniversityTier = (course: Course): number => {
+  if (!course || !course.entryRequirements) return 3; // Default to mid-tier
+  
+  const entryReq = course.entryRequirements.toLowerCase();
+  
+  // Top tier universities (Russell Group/Oxbridge equivalent)
+  if (entryReq.includes("a*a*a") || 
+      (course.university && 
+       (course.university.toLowerCase().includes("oxford") || 
+        course.university.toLowerCase().includes("cambridge") || 
+        course.university.toLowerCase().includes("imperial") || 
+        course.university.toLowerCase().includes("lse")))) {
+    return 1;
+  }
+  
+  // Upper-mid tier (Good universities with strong requirements)
+  if (entryReq.includes("aaa") || entryReq.includes("aab") || 
+      (course.university && course.university.toLowerCase().includes("russell"))) {
+    return 2;
+  }
+  
+  // Mid-tier (Solid universities with moderate requirements)
+  if (entryReq.includes("abb") || entryReq.includes("bbb") || entryReq.includes("bbc")) {
+    return 3;
+  }
+  
+  // Lower-mid tier (Universities with more accessible requirements)
+  if (entryReq.includes("bcc") || entryReq.includes("ccc")) {
+    return 4;
+  }
+  
+  // Lower tier (Most accessible higher education options)
+  return 5;
+};
+
 export const matchGradesToCourses = (
   grades: SubjectGrade[],
-  extraActivities: ExtraCurricular[] = []
+  extraActivities: ExtraCurricular[] = [],
+  regionPreference?: string
 ): { courses: Course[], ucasPoints: number } => {
   if (!grades || !Array.isArray(grades) || grades.length === 0) {
     return { courses: [], ucasPoints: 0 };
@@ -226,35 +306,48 @@ export const matchGradesToCourses = (
     course && meetsGradeRequirements(course, grades)
   );
 
-  // Sort courses by relevance to student's grades
+  // Sort courses by relevance to student's grades and region preference
   const sortedCourses = [...matchedCourses].sort((a, b) => {
-    const aUniversity = a.university?.toLowerCase() || "";
-    const bUniversity = b.university?.toLowerCase() || "";
-    
     // Calculate average grade value for student
     const avgGradePoints = grades.reduce((sum, sg) => sum + gradeToPoints(sg.grade), 0) / grades.length;
     
+    // Get university tiers
+    const aTier = getUniversityTier(a);
+    const bTier = getUniversityTier(b);
+    
+    // Get university regions
+    const aRegion = getUniversityRegion(a.university || "");
+    const bRegion = getUniversityRegion(b.university || "");
+    
+    // If there's a region preference, prioritize courses in that region
+    if (regionPreference) {
+      if (aRegion.includes(regionPreference) && !bRegion.includes(regionPreference)) return -1;
+      if (!aRegion.includes(regionPreference) && bRegion.includes(regionPreference)) return 1;
+    }
+    
     // For high achieving students (A*/A average)
     if (avgGradePoints >= 5) {
-      // Prioritize prestigious universities
-      if (aUniversity.includes("oxford") || aUniversity.includes("cambridge")) return -1;
-      if (bUniversity.includes("oxford") || bUniversity.includes("cambridge")) return 1;
-      if (aUniversity.includes("imperial") || aUniversity.includes("lse")) return -1;
-      if (bUniversity.includes("imperial") || bUniversity.includes("lse")) return 1;
+      // Prioritize top-tier universities
+      if (aTier < bTier) return -1;
+      if (aTier > bTier) return 1;
     }
     // For good students (B average)
     else if (avgGradePoints >= 4) {
-      // Prioritize good universities but not necessarily the most prestigious
-      if ((aUniversity.includes("russell") || aUniversity.includes("university of")) && 
-          !(bUniversity.includes("russell") || bUniversity.includes("university of"))) return -1;
-      if (!(aUniversity.includes("russell") || aUniversity.includes("university of")) && 
-          (bUniversity.includes("russell") || bUniversity.includes("university of"))) return 1;
+      // Prioritize mid-to-upper-tier universities
+      if (aTier === 2 || aTier === 3) return -1;
+      if (bTier === 2 || bTier === 3) return 1;
     }
     // For average students (C average)
+    else if (avgGradePoints >= 3) {
+      // Prioritize mid-to-lower-tier universities
+      if (aTier === 3 || aTier === 4) return -1;
+      if (bTier === 3 || bTier === 4) return 1;
+    }
+    // For lower achieving students
     else {
-      // Prioritize more accessible institutions
-      if (aUniversity.includes("college") && !bUniversity.includes("college")) return -1;
-      if (!aUniversity.includes("college") && bUniversity.includes("college")) return 1;
+      // Prioritize lower-tier universities
+      if (aTier > bTier) return -1;
+      if (aTier < bTier) return 1;
     }
     
     return 0;
