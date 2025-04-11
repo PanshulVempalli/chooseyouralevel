@@ -47,6 +47,7 @@ const ExtraCurricularSelector: React.FC<ExtraCurricularSelectorProps> = ({
       }
     } else {
       setPointsValue(0);
+      setCustomActivityName("");
     }
   };
 
