@@ -18,6 +18,7 @@ import {
 import { subjects } from "@/data/subjects";
 import { SubjectGrade } from "@/utils/matchGrades";
 
+// Ensure that grades are always non-empty strings
 const grades = ["A*", "A", "B", "C", "D", "E", "U"];
 
 interface SubjectGradeSelectorProps {
@@ -31,7 +32,8 @@ const SubjectGradeSelector: React.FC<SubjectGradeSelectorProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
-  const [selectedGrade, setSelectedGrade] = useState<string>("A*");
+  // Initialize with a valid grade value to avoid empty string issues
+  const [selectedGrade, setSelectedGrade] = useState<string>(grades[0]);
   const [availableSubjects, setAvailableSubjects] = useState<typeof subjects>([]);
   
   // Make sure subjects is always an array
@@ -54,10 +56,11 @@ const SubjectGradeSelector: React.FC<SubjectGradeSelectorProps> = ({
   };
 
   const handleAddGrade = () => {
-    if (selectedSubject) {
+    if (selectedSubject && selectedGrade) {
       onAddGrade(selectedSubject, selectedGrade);
       setSelectedSubject(null);
-      setSelectedGrade("A*");
+      // Reset to a valid grade, never empty string
+      setSelectedGrade(grades[0]);
       setOpen(false);
     }
   };
@@ -126,13 +129,20 @@ const SubjectGradeSelector: React.FC<SubjectGradeSelectorProps> = ({
           Select Grade
         </label>
         <div className="flex space-x-2">
-          <Select value={selectedGrade} onValueChange={setSelectedGrade}>
+          <Select 
+            value={selectedGrade} 
+            onValueChange={(value) => {
+              // Additional check to ensure we never set an empty string value
+              setSelectedGrade(value || grades[0]);
+            }}
+          >
             <SelectTrigger className="flex-1">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
+              {/* Ensure each grade is a non-empty string */}
               {grades.map((grade) => (
-                <SelectItem key={grade} value={grade}>
+                <SelectItem key={grade} value={grade || "default"}>
                   {grade}
                 </SelectItem>
               ))}
