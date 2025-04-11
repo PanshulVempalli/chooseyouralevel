@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -22,7 +23,7 @@ const GradeCalculator = () => {
   const { toast } = useToast();
 
   const regions = [
-    { value: "", label: "No preference" },
+    { value: "none", label: "No preference" },
     { value: "UK", label: "United Kingdom (all)" },
     { value: "London, UK", label: "London" },
     { value: "Oxbridge, UK", label: "Oxford & Cambridge" },

@@ -33,7 +33,7 @@ const SubjectGradeSelector: React.FC<SubjectGradeSelectorProps> = ({
   const [open, setOpen] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<string | null>(null);
   // Initialize with a valid grade value to avoid empty string issues
-  const [selectedGrade, setSelectedGrade] = useState<string>(grades[0]);
+  const [selectedGrade, setSelectedGrade] = useState<string>("A*");
   const [availableSubjects, setAvailableSubjects] = useState<typeof subjects>([]);
   
   // Make sure subjects is always an array
@@ -60,7 +60,7 @@ const SubjectGradeSelector: React.FC<SubjectGradeSelectorProps> = ({
       onAddGrade(selectedSubject, selectedGrade);
       setSelectedSubject(null);
       // Reset to a valid grade, never empty string
-      setSelectedGrade(grades[0]);
+      setSelectedGrade("A*");
       setOpen(false);
     }
   };
@@ -133,16 +133,18 @@ const SubjectGradeSelector: React.FC<SubjectGradeSelectorProps> = ({
             value={selectedGrade} 
             onValueChange={(value) => {
               // Additional check to ensure we never set an empty string value
-              setSelectedGrade(value || grades[0]);
+              if (value && value.trim() !== "") {
+                setSelectedGrade(value);
+              }
             }}
           >
             <SelectTrigger className="flex-1">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {/* Ensure each grade is a non-empty string */}
+              {/* Ensure each grade has a non-empty string value */}
               {grades.map((grade) => (
-                <SelectItem key={grade} value={grade || "default"}>
+                <SelectItem key={grade} value={grade}>
                   {grade}
                 </SelectItem>
               ))}
