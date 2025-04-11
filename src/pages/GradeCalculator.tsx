@@ -1,10 +1,11 @@
+
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { BookOpen, ArrowLeft, GraduationCap, Building, Award } from "lucide-react";
+import { BookOpen, ArrowLeft, GraduationCap, Building, Award, CheckCircle2, AlertCircle } from "lucide-react";
 import GradeSelector from "@/components/GradeSelector";
 import { matchGradesToCourses, SubjectGrade, ExtraCurricular } from "@/utils/matchGrades";
 import { subjects } from "@/data/subjects";
@@ -85,6 +86,27 @@ const GradeCalculator = () => {
 
   const calculateExtraPoints = () => {
     return extraActivities.reduce((total, activity) => total + activity.pointsValue, 0);
+  };
+
+  // Check if student has required subject with minimum grade
+  const hasRequiredSubject = (requiredSubject: { id: string, minGrade: string }) => {
+    const studentGrade = selectedGrades.find(sg => sg.subjectId === requiredSubject.id);
+    if (!studentGrade) return false;
+    
+    // Convert grades to points for comparison
+    const gradeToPoints = (grade: string): number => {
+      switch (grade) {
+        case "A*": return 6;
+        case "A": return 5;
+        case "B": return 4;
+        case "C": return 3;
+        case "D": return 2;
+        case "E": return 1;
+        default: return 0;
+      }
+    };
+    
+    return gradeToPoints(studentGrade.grade) >= gradeToPoints(requiredSubject.minGrade);
   };
 
   return (
@@ -210,11 +232,35 @@ const GradeCalculator = () => {
                             </div>
                           </div>
                           
-                          {course.subjects && course.subjects.length > 0 && (
+                          {course.requiredSubjects && course.requiredSubjects.length > 0 && (
                             <div className="mt-3 text-sm">
-                              <span className="font-medium">Required/Recommended Subjects:</span>
+                              <span className="font-medium flex items-center">
+                                <CheckCircle2 size={14} className="mr-1 text-green-600" /> Required Subjects:
+                              </span>
                               <div className="flex flex-wrap gap-1 mt-1">
-                                {course.subjects.map((subjectId: string) => {
+                                {course.requiredSubjects.map((subjectReq: { id: string, minGrade: string }) => {
+                                  const hasSubject = hasRequiredSubject(subjectReq);
+                                  return (
+                                    <Badge 
+                                      key={subjectReq.id}
+                                      variant={hasSubject ? "default" : "outline"}
+                                      className={hasSubject ? "bg-green-600" : "border-red-500 text-red-500"}
+                                    >
+                                      {getSubjectName(subjectReq.id)} (Min. {subjectReq.minGrade})
+                                    </Badge>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          )}
+                          
+                          {course.recommendedSubjects && course.recommendedSubjects.length > 0 && (
+                            <div className="mt-3 text-sm">
+                              <span className="font-medium flex items-center">
+                                <AlertCircle size={14} className="mr-1 text-amber-500" /> Recommended Subjects:
+                              </span>
+                              <div className="flex flex-wrap gap-1 mt-1">
+                                {course.recommendedSubjects.map((subjectId: string) => {
                                   const isStudied = selectedGrades.some(sg => sg.subjectId === subjectId);
                                   return (
                                     <Badge 

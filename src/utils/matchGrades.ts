@@ -1,3 +1,4 @@
+
 import { Course } from "../data/careers";
 import { universityDegrees } from "../data/careers";
 
@@ -49,9 +50,33 @@ const calculateTotalUcasPoints = (
   return gradePoints + extraPoints;
 };
 
+// Check if student has the required subjects with minimum grades
+const hasRequiredSubjects = (course: Course, grades: SubjectGrade[]): boolean => {
+  if (!course || !course.requiredSubjects || course.requiredSubjects.length === 0) {
+    return true; // No required subjects specified
+  }
+  
+  // Check each required subject
+  for (const requiredSubject of course.requiredSubjects) {
+    const studentGrade = grades.find(sg => sg.subjectId === requiredSubject.id);
+    
+    // If student doesn't have the subject or grade is below minimum
+    if (!studentGrade || gradeToPoints(studentGrade.grade) < gradeToPoints(requiredSubject.minGrade)) {
+      return false;
+    }
+  }
+  
+  return true;
+}
+
 // Check if the student meets the minimum grade requirements for a course
 const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean => {
   if (!course || !grades || !Array.isArray(grades) || grades.length === 0) {
+    return false;
+  }
+  
+  // First check if student has all required subjects with minimum grades
+  if (!hasRequiredSubjects(course, grades)) {
     return false;
   }
   
@@ -130,27 +155,21 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
     // If no specific grade pattern matched, check average grade point
     const avgGradePoints = grades.reduce((sum, sg) => sum + gradeToPoints(sg.grade), 0) / grades.length;
     
-    // Check for subject-specific requirements if specified
-    if (course.subjects && Array.isArray(course.subjects) && course.subjects.length > 0) {
-      const matchedSubjects = course.subjects.filter(subjectId => 
-        grades.some(sg => sg.subjectId === subjectId)
+    // Check for recommended subjects if specified (now separate from required)
+    if (course.recommendedSubjects && Array.isArray(course.recommendedSubjects) && course.recommendedSubjects.length > 0) {
+      const matchedSubjects = course.recommendedSubjects.filter(subject => 
+        grades.some(sg => sg.subjectId === subject)
       ).length;
       
-      // For higher demanding courses, require more subject matches
+      // For higher demanding courses, prefer more subject matches
       if (entryReq.includes("a*") || entryReq.includes("aaa")) {
-        if (avgGradePoints < 5 || matchedSubjects < Math.ceil(course.subjects.length * 0.75)) {
+        if (avgGradePoints < 5 || matchedSubjects < Math.ceil(course.recommendedSubjects.length * 0.5)) {
           return false;
         }
       } 
       // For average courses, be more lenient with subject matching
       else if (entryReq.includes("bbb") || entryReq.includes("bbc")) {
-        if (avgGradePoints < 4 || matchedSubjects < Math.ceil(course.subjects.length * 0.5)) {
-          return false;
-        }
-      }
-      // For lower entry requirement courses
-      else {
-        if (avgGradePoints < 3 || matchedSubjects < Math.ceil(course.subjects.length * 0.3)) {
+        if (avgGradePoints < 4 || matchedSubjects < Math.ceil(course.recommendedSubjects.length * 0.3)) {
           return false;
         }
       }
@@ -174,17 +193,15 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
   // Match courses based on average grade points
   // Lower-tier courses accept average grades of C (3 points) and above
   if (avgGradePoints >= 3) {
-    const courseSubjects = course.subjects && Array.isArray(course.subjects) ? course.subjects : [];
-    
     // More lenient subject matching for average grades
-    if (courseSubjects.length === 0) return true;
+    if (!course.recommendedSubjects || course.recommendedSubjects.length === 0) return true;
     
-    const subjectMatchCount = courseSubjects.filter(subjectId => 
-      grades.some(sg => sg.subjectId === subjectId)
+    const subjectMatchCount = course.recommendedSubjects.filter(subject => 
+      grades.some(sg => sg.subjectId === subject)
     ).length;
     
     // Student needs to have at least some of the recommended subjects
-    return subjectMatchCount >= Math.min(1, courseSubjects.length);
+    return subjectMatchCount >= Math.min(1, course.recommendedSubjects.length);
   }
   
   return false;

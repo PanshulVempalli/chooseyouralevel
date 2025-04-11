@@ -5,7 +5,7 @@ import { subjects } from "@/data/subjects";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, Briefcase, RotateCcw, ExternalLink, Clock, Award, Building } from "lucide-react";
+import { BookOpen, Briefcase, RotateCcw, ExternalLink, Clock, Award, Building, CheckCircle2, AlertCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -91,16 +91,38 @@ const ResultsDisplay = ({ courses, careers, selectedSubjects, onReset }: Results
                   <CardContent className="flex-grow">
                     <p className="text-sm mb-4">{course.description}</p>
                     
-                    <div className="mb-3">
-                      <h4 className="text-sm font-medium mb-1">Required/Recommended Subjects:</h4>
-                      <ul className="list-disc list-inside text-sm space-y-1">
-                        {course.subjects.map((subjectId) => (
-                          <li key={subjectId} className={`${selectedSubjects.includes(subjectId) ? "font-medium text-education-primary" : ""}`}>
-                            {getSubjectName(subjectId)}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                    {course.requiredSubjects && course.requiredSubjects.length > 0 && (
+                      <div className="mb-3">
+                        <h4 className="text-sm font-medium mb-1 flex items-center">
+                          <CheckCircle2 size={14} className="mr-1 text-green-600" /> Required Subjects:
+                        </h4>
+                        <ul className="list-disc list-inside text-sm space-y-1">
+                          {course.requiredSubjects.map((subjectReq) => {
+                            const isStudied = selectedSubjects.includes(subjectReq.id);
+                            return (
+                              <li key={subjectReq.id} className={`${isStudied ? "font-medium text-green-600" : "text-red-500"}`}>
+                                {getSubjectName(subjectReq.id)} (Min. {subjectReq.minGrade})
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {course.recommendedSubjects && course.recommendedSubjects.length > 0 && (
+                      <div className="mb-3">
+                        <h4 className="text-sm font-medium mb-1 flex items-center">
+                          <AlertCircle size={14} className="mr-1 text-amber-500" /> Recommended Subjects:
+                        </h4>
+                        <ul className="list-disc list-inside text-sm space-y-1">
+                          {course.recommendedSubjects.map((subjectId) => (
+                            <li key={subjectId} className={`${selectedSubjects.includes(subjectId) ? "font-medium text-education-primary" : ""}`}>
+                              {getSubjectName(subjectId)}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
                     {course.duration && (
                       <div className="text-sm flex items-center text-muted-foreground mt-2">
@@ -133,16 +155,38 @@ const ResultsDisplay = ({ courses, careers, selectedSubjects, onReset }: Results
                             </div>
                           )}
 
-                          <div className="mb-4">
-                            <h4 className="font-medium mb-2">Required/Recommended Subjects:</h4>
-                            <ul className="list-disc list-inside space-y-1">
-                              {course.subjects.map((subjectId) => (
-                                <li key={subjectId} className={`${selectedSubjects.includes(subjectId) ? "font-medium text-education-primary" : ""}`}>
-                                  {getSubjectName(subjectId)}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                          {course.requiredSubjects && course.requiredSubjects.length > 0 && (
+                            <div className="mb-4">
+                              <h4 className="font-medium mb-2 flex items-center">
+                                <CheckCircle2 size={16} className="mr-2 text-green-600" /> Required Subjects:
+                              </h4>
+                              <ul className="list-disc list-inside space-y-1">
+                                {course.requiredSubjects.map((subjectReq) => {
+                                  const isStudied = selectedSubjects.includes(subjectReq.id);
+                                  return (
+                                    <li key={subjectReq.id} className={`${isStudied ? "font-medium text-green-600" : "text-red-500"}`}>
+                                      {getSubjectName(subjectReq.id)} (Minimum Grade: {subjectReq.minGrade})
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          )}
+                          
+                          {course.recommendedSubjects && course.recommendedSubjects.length > 0 && (
+                            <div className="mb-4">
+                              <h4 className="font-medium mb-2 flex items-center">
+                                <AlertCircle size={16} className="mr-2 text-amber-500" /> Recommended Subjects:
+                              </h4>
+                              <ul className="list-disc list-inside space-y-1">
+                                {course.recommendedSubjects.map((subjectId) => (
+                                  <li key={subjectId} className={`${selectedSubjects.includes(subjectId) ? "font-medium text-education-primary" : ""}`}>
+                                    {getSubjectName(subjectId)}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
                           
                           <div className="mb-4">
                             <h4 className="font-medium mb-2">Career Opportunities:</h4>
