@@ -15,8 +15,19 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+interface RequiredSubject {
+  id: string;
+  minGrade: string;
+}
+
+// Extend the Course type to include the properties we need
+interface ExtendedCourse extends Course {
+  requiredSubjects?: RequiredSubject[];
+  recommendedSubjects?: string[];
+}
+
 interface ResultsDisplayProps {
-  courses: Course[];
+  courses: ExtendedCourse[];
   careers: Career[];
   selectedSubjects: string[];
   onReset: () => void;

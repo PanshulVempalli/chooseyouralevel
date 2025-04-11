@@ -13,6 +13,17 @@ export type ExtraCurricular = {
   pointsValue: number;
 };
 
+// Extended Course type with the required properties
+export interface RequiredSubject {
+  id: string;
+  minGrade: string;
+}
+
+export interface ExtendedCourse extends Course {
+  requiredSubjects?: RequiredSubject[];
+  recommendedSubjects?: string[];
+}
+
 // Function to convert grade to numerical value for comparison
 const gradeToPoints = (grade: string): number => {
   switch (grade) {
@@ -51,7 +62,7 @@ const calculateTotalUcasPoints = (
 };
 
 // Check if student has the required subjects with minimum grades
-const hasRequiredSubjects = (course: Course, grades: SubjectGrade[]): boolean => {
+const hasRequiredSubjects = (course: ExtendedCourse, grades: SubjectGrade[]): boolean => {
   if (!course.requiredSubjects || course.requiredSubjects.length === 0) {
     return true; // No required subjects specified
   }
@@ -70,7 +81,7 @@ const hasRequiredSubjects = (course: Course, grades: SubjectGrade[]): boolean =>
 }
 
 // Calculate subject relevance score to improve matching
-const calculateSubjectRelevanceScore = (course: Course, grades: SubjectGrade[]): number => {
+const calculateSubjectRelevanceScore = (course: ExtendedCourse, grades: SubjectGrade[]): number => {
   let score = 0;
   const studentSubjects = grades.map(sg => sg.subjectId);
   
@@ -100,7 +111,7 @@ const calculateSubjectRelevanceScore = (course: Course, grades: SubjectGrade[]):
 }
 
 // Check if the student meets the minimum grade requirements for a course
-const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean => {
+const meetsGradeRequirements = (course: ExtendedCourse, grades: SubjectGrade[]): boolean => {
   if (!course || !grades || !Array.isArray(grades) || grades.length === 0) {
     return false;
   }
@@ -130,47 +141,56 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
     
     // Check for Oxford, Cambridge, etc. requiring A*A*A* or A*A*A
     if (entryReq.includes("a*a*a*")) {
-      return gradeCount.astar >= 3;
+      return gradeCount.astar >= 3 && hasRequiredSubjects(course, grades);
     }
     else if (entryReq.includes("a*a*a")) {
-      return gradeCount.astar >= 2 && (gradeCount.astar + gradeCount.a) >= 3;
+      return gradeCount.astar >= 2 && 
+             (gradeCount.astar + gradeCount.a) >= 3 && 
+             hasRequiredSubjects(course, grades);
     }
     // Check for AAA requirements
     else if (entryReq.includes("aaa") && !entryReq.includes("aab")) {
-      return (gradeCount.a + gradeCount.astar) >= 3;
+      return (gradeCount.a + gradeCount.astar) >= 3 && 
+             hasRequiredSubjects(course, grades);
     }
     // Check for AAB requirements
     else if (entryReq.includes("aab")) {
       return (gradeCount.a + gradeCount.astar) >= 2 && 
-             (gradeCount.a + gradeCount.astar + gradeCount.b) >= 3;
+             (gradeCount.a + gradeCount.astar + gradeCount.b) >= 3 && 
+             hasRequiredSubjects(course, grades);
     }
     // Check for ABB requirements
     else if (entryReq.includes("abb")) {
       return (gradeCount.a + gradeCount.astar) >= 1 && 
              (gradeCount.a + gradeCount.astar + gradeCount.b) >= 3 &&
-             gradeCount.b >= 1;
+             gradeCount.b >= 1 && 
+             hasRequiredSubjects(course, grades);
     }
     // Check for BBB requirements
     else if (entryReq.includes("bbb")) {
-      return gradeCount.b >= 3 || 
+      return (gradeCount.b >= 3 || 
             ((gradeCount.b + gradeCount.a + gradeCount.astar) >= 3 && 
-             (gradeCount.a + gradeCount.astar + gradeCount.b) >= gradeCount.c);
+             (gradeCount.a + gradeCount.astar + gradeCount.b) >= gradeCount.c)) && 
+             hasRequiredSubjects(course, grades);
     }
     // Check for BBC requirements
     else if (entryReq.includes("bbc")) {
       return gradeCount.b >= 2 && 
-             (gradeCount.b + gradeCount.c + gradeCount.a + gradeCount.astar) >= 3;
+             (gradeCount.b + gradeCount.c + gradeCount.a + gradeCount.astar) >= 3 && 
+             hasRequiredSubjects(course, grades);
     }
     // Check for CCC requirements
     else if (entryReq.includes("ccc")) {
-      return gradeCount.c >= 3 || 
+      return (gradeCount.c >= 3 || 
             ((gradeCount.c + gradeCount.b + gradeCount.a + gradeCount.astar) >= 3 && 
-             (gradeCount.b + gradeCount.a + gradeCount.astar) >= 1);
+             (gradeCount.b + gradeCount.a + gradeCount.astar) >= 1)) && 
+             hasRequiredSubjects(course, grades);
     }
     // Check for CCD requirements
     else if (entryReq.includes("ccd")) {
       return gradeCount.c >= 2 && 
-             (gradeCount.c + gradeCount.d + gradeCount.b + gradeCount.a + gradeCount.astar) >= 3;
+             (gradeCount.c + gradeCount.d + gradeCount.b + gradeCount.a + gradeCount.astar) >= 3 && 
+             hasRequiredSubjects(course, grades);
     }
     // For entry requirements with just minimum UCAS points
     else if (entryReq.includes("ucas") || entryReq.includes("points")) {
@@ -178,7 +198,7 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
       const pointsMatch = entryReq.match(/(\d+)\s*(?:points|ucas)/i);
       if (pointsMatch && pointsMatch[1]) {
         const requiredPoints = parseInt(pointsMatch[1], 10);
-        return totalPoints >= requiredPoints;
+        return totalPoints >= requiredPoints && hasRequiredSubjects(course, grades);
       }
     }
     
@@ -193,13 +213,13 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
       
       // For higher demanding courses, prefer more subject matches
       if (entryReq.includes("a*") || entryReq.includes("aaa")) {
-        if (avgGradePoints < 5 || matchedSubjects < Math.ceil(course.recommendedSubjects.length * 0.5)) {
+        if (avgGradePoints < 5 || matchedSubjects < Math.ceil(course.recommendedSubjects.length * 0.5) || !hasRequiredSubjects(course, grades)) {
           return false;
         }
       } 
       // For average courses, be more lenient with subject matching
       else if (entryReq.includes("bbb") || entryReq.includes("bbc")) {
-        if (avgGradePoints < 4 || matchedSubjects < Math.ceil(course.recommendedSubjects.length * 0.3)) {
+        if (avgGradePoints < 4 || matchedSubjects < Math.ceil(course.recommendedSubjects.length * 0.3) || !hasRequiredSubjects(course, grades)) {
           return false;
         }
       }
@@ -207,14 +227,14 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
     
     // If it's a high requirement course, ensure average grade is sufficient
     if (entryReq.includes("a*") || entryReq.includes("aaa")) {
-      return avgGradePoints >= 5;
+      return avgGradePoints >= 5 && hasRequiredSubjects(course, grades);
     } 
     // For mid-tier requirements
     else if (entryReq.includes("bbb") || entryReq.includes("abb")) {
-      return avgGradePoints >= 4;
+      return avgGradePoints >= 4 && hasRequiredSubjects(course, grades);
     }
     
-    return avgGradePoints >= 3;
+    return avgGradePoints >= 3 && hasRequiredSubjects(course, grades);
   }
   
   // For courses without specific requirements, be more inclusive
@@ -224,14 +244,15 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
   // Lower-tier courses accept average grades of C (3 points) and above
   if (avgGradePoints >= 3) {
     // More lenient subject matching for average grades
-    if (!course.recommendedSubjects || course.recommendedSubjects.length === 0) return true;
+    if (!course.recommendedSubjects || course.recommendedSubjects.length === 0) 
+      return hasRequiredSubjects(course, grades);
     
     const subjectMatchCount = course.recommendedSubjects.filter(subject => 
       grades.some(sg => sg.subjectId === subject)
     ).length;
     
     // Student needs to have at least some of the recommended subjects
-    return subjectMatchCount >= Math.min(1, course.recommendedSubjects.length);
+    return subjectMatchCount >= Math.min(1, course.recommendedSubjects.length) && hasRequiredSubjects(course, grades);
   }
   
   return false;
@@ -312,7 +333,7 @@ const getUniversityRegion = (universityName: string): string => {
 };
 
 // Function to get university tier based on entry requirements
-const getUniversityTier = (course: Course): number => {
+const getUniversityTier = (course: ExtendedCourse): number => {
   if (!course || !course.entryRequirements) return 3; // Default to mid-tier
   
   const entryReq = course.entryRequirements.toLowerCase();
@@ -351,7 +372,7 @@ export const matchGradesToCourses = (
   grades: SubjectGrade[],
   extraActivities: ExtraCurricular[] = [],
   regionPreference?: string
-): { courses: Course[], ucasPoints: number } => {
+): { courses: ExtendedCourse[], ucasPoints: number } => {
   if (!grades || !Array.isArray(grades) || grades.length === 0) {
     return { courses: [], ucasPoints: 0 };
   }
@@ -359,19 +380,19 @@ export const matchGradesToCourses = (
   // Calculate total UCAS points including extracurricular activities
   const ucasPoints = calculateTotalUcasPoints(grades, extraActivities);
   
-  // Ensure universityDegrees is an array
-  const degreesToMatch = Array.isArray(universityDegrees) ? universityDegrees : [];
+  // Ensure universityDegrees is an array and cast it to our extended type
+  const degreesToMatch = Array.isArray(universityDegrees) ? universityDegrees as ExtendedCourse[] : [];
   
   // Match courses based on subjects taken and grades achieved
   const matchedCourses = degreesToMatch.filter(course => 
-    course && meetsGradeRequirements(course, grades)
+    course && meetsGradeRequirements(course as ExtendedCourse, grades)
   );
 
   // Sort courses by relevance to student's grades, region preference, and subject match
   const sortedCourses = [...matchedCourses].sort((a, b) => {
     // Calculate subject relevance scores
-    const aRelevanceScore = calculateSubjectRelevanceScore(a, grades);
-    const bRelevanceScore = calculateSubjectRelevanceScore(b, grades);
+    const aRelevanceScore = calculateSubjectRelevanceScore(a as ExtendedCourse, grades);
+    const bRelevanceScore = calculateSubjectRelevanceScore(b as ExtendedCourse, grades);
     
     // If there's a significant difference in relevance score, prioritize higher relevance
     if (Math.abs(aRelevanceScore - bRelevanceScore) > 3) {
@@ -382,8 +403,8 @@ export const matchGradesToCourses = (
     const avgGradePoints = grades.reduce((sum, sg) => sum + gradeToPoints(sg.grade), 0) / grades.length;
     
     // Get university tiers
-    const aTier = getUniversityTier(a);
-    const bTier = getUniversityTier(b);
+    const aTier = getUniversityTier(a as ExtendedCourse);
+    const bTier = getUniversityTier(b as ExtendedCourse);
     
     // Get university regions
     const aRegion = getUniversityRegion(a.university || "");
