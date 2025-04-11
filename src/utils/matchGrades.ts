@@ -69,6 +69,36 @@ const hasRequiredSubjects = (course: Course, grades: SubjectGrade[]): boolean =>
   return true;
 }
 
+// Calculate subject relevance score to improve matching
+const calculateSubjectRelevanceScore = (course: Course, grades: SubjectGrade[]): number => {
+  let score = 0;
+  const studentSubjects = grades.map(sg => sg.subjectId);
+  
+  // Score based on required subjects (highest weight)
+  if (course.requiredSubjects) {
+    const requiredMatches = course.requiredSubjects.filter(req => 
+      studentSubjects.includes(req.id)
+    ).length;
+    
+    if (course.requiredSubjects.length > 0) {
+      score += (requiredMatches / course.requiredSubjects.length) * 10; // 0-10 points
+    }
+  }
+  
+  // Score based on recommended subjects (medium weight)
+  if (course.recommendedSubjects) {
+    const recommendedMatches = course.recommendedSubjects.filter(id => 
+      studentSubjects.includes(id)
+    ).length;
+    
+    if (course.recommendedSubjects.length > 0) {
+      score += (recommendedMatches / course.recommendedSubjects.length) * 7; // 0-7 points
+    }
+  }
+  
+  return score;
+}
+
 // Check if the student meets the minimum grade requirements for a course
 const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean => {
   if (!course || !grades || !Array.isArray(grades) || grades.length === 0) {
@@ -209,41 +239,72 @@ const meetsGradeRequirements = (course: Course, grades: SubjectGrade[]): boolean
 
 // Determine the region of a university
 const getUniversityRegion = (universityName: string): string => {
-  const name = universityName ? universityName.toLowerCase() : "";
+  if (!universityName) return "Other";
+  
+  const name = universityName.toLowerCase();
   
   // UK regions
-  if (name.includes("london") || name.includes("imperial") || name.includes("ucl") || name.includes("kings college") || name.includes("lse")) {
+  if (name.includes("london") || name.includes("imperial") || name.includes("ucl") || 
+      name.includes("kings college") || name.includes("lse") || name.includes("queen mary") ||
+      name.includes("royal holloway") || name.includes("goldsmiths")) {
     return "London, UK";
   } else if (name.includes("oxford") || name.includes("cambridge")) {
     return "Oxbridge, UK";
-  } else if (name.includes("edinburgh") || name.includes("glasgow") || name.includes("st andrews")) {
+  } else if (name.includes("edinburgh") || name.includes("glasgow") || 
+             name.includes("st andrews") || name.includes("aberdeen") || 
+             name.includes("strathclyde") || name.includes("dundee")) {
     return "Scotland, UK";
-  } else if (name.includes("cardiff") || name.includes("swansea")) {
+  } else if (name.includes("cardiff") || name.includes("swansea") || 
+             name.includes("aberystwyth") || name.includes("bangor")) {
     return "Wales, UK";
   } else if (name.includes("belfast") || name.includes("ulster")) {
     return "Northern Ireland, UK";
-  } else if (name.includes("manchester") || name.includes("liverpool") || name.includes("leeds") || name.includes("sheffield") || name.includes("newcastle")) {
+  } else if (name.includes("manchester") || name.includes("liverpool") || 
+             name.includes("leeds") || name.includes("sheffield") || 
+             name.includes("newcastle") || name.includes("durham") ||
+             name.includes("york") || name.includes("lancaster")) {
     return "Northern England, UK";
-  } else if (name.includes("birmingham") || name.includes("nottingham") || name.includes("leicester") || name.includes("warwick")) {
+  } else if (name.includes("birmingham") || name.includes("nottingham") || 
+             name.includes("leicester") || name.includes("warwick") ||
+             name.includes("loughborough") || name.includes("keele") ||
+             name.includes("coventry")) {
     return "Midlands, UK";
-  } else if (name.includes("bristol") || name.includes("exeter") || name.includes("bath") || name.includes("southampton")) {
+  } else if (name.includes("bristol") || name.includes("exeter") || 
+             name.includes("bath") || name.includes("southampton") ||
+             name.includes("sussex") || name.includes("reading") ||
+             name.includes("surrey") || name.includes("portsmouth") ||
+             name.includes("brighton") || name.includes("plymouth")) {
     return "Southern England, UK";
   } 
   // International regions
-  else if (name.includes("harvard") || name.includes("princeton") || name.includes("yale") || name.includes("stanford") || name.includes("mit")) {
-    return "USA - Ivy League/Top Tier";
-  } else if (name.includes("sorbonne") || name.includes("heidelberg") || name.includes("bologna")) {
+  else if (name.includes("harvard") || name.includes("princeton") || 
+           name.includes("yale") || name.includes("stanford") || 
+           name.includes("mit") || name.includes("american") ||
+           name.includes("new york")) {
+    return "USA";
+  } else if (name.includes("sorbonne") || name.includes("heidelberg") || 
+             name.includes("bologna") || name.includes("barcelona") ||
+             name.includes("madrid") || name.includes("amsterdam") ||
+             name.includes("berlin")) {
     return "Continental Europe";
-  } else if (name.includes("toronto") || name.includes("mcgill") || name.includes("ubc")) {
+  } else if (name.includes("toronto") || name.includes("mcgill") || 
+             name.includes("ubc") || name.includes("montreal") ||
+             name.includes("alberta")) {
     return "Canada";
-  } else if (name.includes("sydney") || name.includes("melbourne") || name.includes("auckland")) {
+  } else if (name.includes("sydney") || name.includes("melbourne") || 
+             name.includes("auckland") || name.includes("queensland") ||
+             name.includes("monash")) {
     return "Australia/New Zealand";
-  } else if (name.includes("singapore") || name.includes("hong kong") || name.includes("tokyo")) {
+  } else if (name.includes("singapore") || name.includes("hong kong") || 
+             name.includes("tokyo") || name.includes("beijing") ||
+             name.includes("shanghai") || name.includes("seoul")) {
     return "East Asia";
   }
   
   // Default for UK universities
-  if (name.includes("university") && !name.includes("college") && !name.includes("school")) {
+  if (name.includes("university") && name.includes("uk") || 
+      name.includes("uni") && name.includes("uk") || 
+      /\b(uk)\b/.test(name)) {
     return "UK";
   }
   
@@ -306,8 +367,17 @@ export const matchGradesToCourses = (
     course && meetsGradeRequirements(course, grades)
   );
 
-  // Sort courses by relevance to student's grades and region preference
+  // Sort courses by relevance to student's grades, region preference, and subject match
   const sortedCourses = [...matchedCourses].sort((a, b) => {
+    // Calculate subject relevance scores
+    const aRelevanceScore = calculateSubjectRelevanceScore(a, grades);
+    const bRelevanceScore = calculateSubjectRelevanceScore(b, grades);
+    
+    // If there's a significant difference in relevance score, prioritize higher relevance
+    if (Math.abs(aRelevanceScore - bRelevanceScore) > 3) {
+      return bRelevanceScore - aRelevanceScore;
+    }
+    
     // Calculate average grade value for student
     const avgGradePoints = grades.reduce((sum, sg) => sum + gradeToPoints(sg.grade), 0) / grades.length;
     
@@ -319,8 +389,8 @@ export const matchGradesToCourses = (
     const aRegion = getUniversityRegion(a.university || "");
     const bRegion = getUniversityRegion(b.university || "");
     
-    // If there's a region preference, prioritize courses in that region
-    if (regionPreference) {
+    // If there's a region preference and it's not "none", prioritize courses in that region
+    if (regionPreference && regionPreference !== "none") {
       if (aRegion.includes(regionPreference) && !bRegion.includes(regionPreference)) return -1;
       if (!aRegion.includes(regionPreference) && bRegion.includes(regionPreference)) return 1;
     }
@@ -350,7 +420,8 @@ export const matchGradesToCourses = (
       if (aTier < bTier) return 1;
     }
     
-    return 0;
+    // If all else is equal, use subject relevance as final tiebreaker
+    return bRelevanceScore - aRelevanceScore;
   });
 
   return {
