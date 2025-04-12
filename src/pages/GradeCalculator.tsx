@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -12,6 +13,11 @@ import { Badge } from "@/components/ui/badge";
 import ExtraCurricularSelector from "@/components/ExtraCurricularSelector";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import GradeImprovementSimulator from "@/components/GradeImprovementSimulator";
+import CourseComparisonTool from "@/components/CourseComparisonTool";
+import InteractiveRequirementsCard from "@/components/InteractiveRequirementsCard";
+import ExportResultsButton from "@/components/ExportResultsButton";
 
 const GradeCalculator = () => {
   const [selectedGrades, setSelectedGrades] = useState<SubjectGrade[]>([]);
@@ -19,6 +25,7 @@ const GradeCalculator = () => {
   const [regionPreference, setRegionPreference] = useState<string>("");
   const [showResults, setShowResults] = useState(false);
   const [matchedCourses, setMatchedCourses] = useState<{ courses: any[], ucasPoints: number }>({ courses: [], ucasPoints: 0 });
+  const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
   const { toast } = useToast();
 
   const regions = [
@@ -102,6 +109,7 @@ const GradeCalculator = () => {
 
   const resetResults = () => {
     setShowResults(false);
+    setSelectedCourse(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -320,8 +328,25 @@ const GradeCalculator = () => {
                     </div>
                   )}
                 </div>
+                
+                <div className="ml-auto">
+                  <ExportResultsButton 
+                    selectedGrades={selectedGrades}
+                    matchedCourses={matchedCourses.courses}
+                    ucasPoints={matchedCourses.ucasPoints}
+                    regionPreference={regionPreference}
+                  />
+                </div>
               </div>
               
+              {/* New Grade Improvement Simulator */}
+              <div className="mb-8">
+                <GradeImprovementSimulator 
+                  currentGrades={selectedGrades}
+                  currentUcasPoints={matchedCourses.ucasPoints}
+                />
+              </div>
+
               {!matchedCourses.courses || matchedCourses.courses.length === 0 ? (
                 <Card>
                   <CardContent className="pt-6 text-center">
@@ -330,94 +355,128 @@ const GradeCalculator = () => {
                   </CardContent>
                 </Card>
               ) : (
-                <div className="space-y-4">
-                  {matchedCourses.courses.map((course: any) => (
-                    <Card key={course.id} className="overflow-hidden">
-                      <CardContent className="p-0">
-                        <div className="p-6">
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-                            <div>
-                              <h2 className="text-xl font-semibold">{course.name}</h2>
-                              <div className="flex items-center gap-2 mt-1">
-                                <Building className="h-4 w-4 text-muted-foreground" />
-                                <p className="text-muted-foreground">{course.university || "University Degree"}</p>
-                                <Badge 
-                                  variant="outline" 
-                                  className={`ml-2 ${getInstitutionColor(course.university || "")}`}
-                                >
-                                  {getInstitutionType(course.university || "")}
-                                </Badge>
-                              </div>
-                            </div>
-                            <div className="mt-2 sm:mt-0">
-                              <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
-                                <BookOpen className="mr-1 h-3 w-3" /> {course.duration || "3 years"}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          <p className="text-sm mb-4">{course.description}</p>
-                          
-                          <div className="flex flex-col sm:flex-row justify-between text-sm">
-                            <div>
-                              <span className="font-medium">Entry Requirements:</span> {course.entryRequirements || "Grades vary by university"}
-                            </div>
-                            <div className="mt-2 sm:mt-0">
-                              <span className="font-medium flex items-center">
-                                <Globe className="h-3 w-3 mr-1 text-blue-500" />
-                                Region: {getUniversityRegion(course.university || "")}
-                              </span>
-                            </div>
-                          </div>
-                          
-                          {course.requiredSubjects && course.requiredSubjects.length > 0 && (
-                            <div className="mt-3 text-sm">
-                              <span className="font-medium flex items-center">
-                                <CheckCircle2 size={14} className="mr-1 text-green-600" /> Required Subjects:
-                              </span>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {course.requiredSubjects.map((subjectReq: { id: string, minGrade: string }) => {
-                                  const hasSubject = hasRequiredSubject(subjectReq);
-                                  return (
+                <Tabs defaultValue="list" className="w-full mb-8">
+                  <TabsList className="w-full mb-4">
+                    <TabsTrigger value="list" className="flex-1">Course List</TabsTrigger>
+                    <TabsTrigger value="compare" className="flex-1">Compare Courses</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="list" className="mt-0">
+                    <div className="space-y-4">
+                      {matchedCourses.courses.map((course: any) => (
+                        <Card key={course.id} className="overflow-hidden">
+                          <CardContent className="p-0">
+                            <div className="p-6">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                                <div>
+                                  <h2 className="text-xl font-semibold">{course.name}</h2>
+                                  <div className="flex items-center gap-2 mt-1">
+                                    <Building className="h-4 w-4 text-muted-foreground" />
+                                    <p className="text-muted-foreground">{course.university || "University Degree"}</p>
                                     <Badge 
-                                      key={subjectReq.id}
-                                      variant={hasSubject ? "default" : "outline"}
-                                      className={hasSubject ? "bg-green-600" : "border-red-500 text-red-500"}
+                                      variant="outline" 
+                                      className={`ml-2 ${getInstitutionColor(course.university || "")}`}
                                     >
-                                      {getSubjectName(subjectReq.id)} (Min. {subjectReq.minGrade})
+                                      {getInstitutionType(course.university || "")}
                                     </Badge>
-                                  );
-                                })}
+                                  </div>
+                                </div>
+                                <div className="mt-2 sm:mt-0">
+                                  <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">
+                                    <BookOpen className="mr-1 h-3 w-3" /> {course.duration || "3 years"}
+                                  </span>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          
-                          {course.recommendedSubjects && course.recommendedSubjects.length > 0 && (
-                            <div className="mt-3 text-sm">
-                              <span className="font-medium flex items-center">
-                                <AlertCircle size={14} className="mr-1 text-amber-500" /> Recommended Subjects:
-                              </span>
-                              <div className="flex flex-wrap gap-1 mt-1">
-                                {course.recommendedSubjects.map((subjectId: string) => {
-                                  const isStudied = selectedGrades.some(sg => sg.subjectId === subjectId);
-                                  return (
-                                    <Badge 
-                                      key={subjectId}
-                                      variant={isStudied ? "default" : "outline"}
-                                      className={isStudied ? "bg-education-primary" : ""}
-                                    >
-                                      {getSubjectName(subjectId)}
-                                    </Badge>
-                                  );
-                                })}
+                              
+                              <p className="text-sm mb-4">{course.description}</p>
+                              
+                              {/* Interactive Requirements Card - Show on click */}
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => setSelectedCourse(course === selectedCourse ? null : course)}
+                                className="mb-4"
+                              >
+                                {course === selectedCourse ? "Hide" : "Show"} Detailed Requirements
+                              </Button>
+                              
+                              {selectedCourse && selectedCourse.id === course.id && (
+                                <InteractiveRequirementsCard 
+                                  courseName={course.name}
+                                  university={course.university}
+                                  entryRequirements={course.entryRequirements}
+                                  requiredSubjects={course.requiredSubjects}
+                                  recommendedSubjects={course.recommendedSubjects}
+                                  studentGrades={selectedGrades}
+                                />
+                              )}
+                              
+                              <div className="flex flex-col sm:flex-row justify-between text-sm">
+                                <div>
+                                  <span className="font-medium">Entry Requirements:</span> {course.entryRequirements || "Grades vary by university"}
+                                </div>
+                                <div className="mt-2 sm:mt-0">
+                                  <span className="font-medium flex items-center">
+                                    <Globe className="h-3 w-3 mr-1 text-blue-500" />
+                                    Region: {getUniversityRegion(course.university || "")}
+                                  </span>
+                                </div>
                               </div>
+                              
+                              {course.requiredSubjects && course.requiredSubjects.length > 0 && (
+                                <div className="mt-3 text-sm">
+                                  <span className="font-medium flex items-center">
+                                    <CheckCircle2 size={14} className="mr-1 text-green-600" /> Required Subjects:
+                                  </span>
+                                  <div className="flex flex-wrap gap-1 mt-1">
+                                    {course.requiredSubjects.map((subjectReq: { id: string, minGrade: string }) => {
+                                      const hasSubject = hasRequiredSubject(subjectReq);
+                                      return (
+                                        <Badge 
+                                          key={subjectReq.id}
+                                          variant={hasSubject ? "default" : "outline"}
+                                          className={hasSubject ? "bg-green-600" : "border-red-500 text-red-500"}
+                                        >
+                                          {getSubjectName(subjectReq.id)} (Min. {subjectReq.minGrade})
+                                        </Badge>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
+                              
+                              {course.recommendedSubjects && course.recommendedSubjects.length > 0 && (
+                                <div className="mt-3 text-sm">
+                                  <span className="font-medium flex items-center">
+                                    <AlertCircle size={14} className="mr-1 text-amber-500" /> Recommended Subjects:
+                                  </span>
+                                  <div className="flex flex-wrap gap-1 mt-1">
+                                    {course.recommendedSubjects.map((subjectId: string) => {
+                                      const isStudied = selectedGrades.some(sg => sg.subjectId === subjectId);
+                                      return (
+                                        <Badge 
+                                          key={subjectId}
+                                          variant={isStudied ? "default" : "outline"}
+                                          className={isStudied ? "bg-education-primary" : ""}
+                                        >
+                                          {getSubjectName(subjectId)}
+                                        </Badge>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </TabsContent>
+                  
+                  <TabsContent value="compare" className="mt-0">
+                    <CourseComparisonTool courses={matchedCourses.courses} />
+                  </TabsContent>
+                </Tabs>
               )}
             </div>
           )}
