@@ -1,7 +1,6 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Loader2, Save, FileText, FilePdf } from "lucide-react";
+import { Download, Loader2, Save, FileText, File } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { 
   DropdownMenu,
@@ -137,11 +136,9 @@ const ExportResultsButton = ({
     setExportFormat(format);
     
     try {
-      // Create content based on selected format
       let content = format === "html" ? exportAsHTML() : exportAsText();
       let mimeType = format === "html" ? "text/html" : "text/plain";
       
-      // Create blob and download
       const blob = new Blob([content], { type: mimeType });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -196,7 +193,7 @@ const ExportResultsButton = ({
           <span>HTML Format</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => exportResults("txt")} className="cursor-pointer">
-          <FilePdf className="mr-2 h-4 w-4" />
+          <File className="mr-2 h-4 w-4" />
           <span>Text Format</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
