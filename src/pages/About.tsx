@@ -2,7 +2,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, BookOpen, Award, Users } from "lucide-react";
+import { GraduationCap, BookOpen, Award, Users, Download, BarChart, CheckCircle2, BookmarkCheck, Globe, Calculator, LineChart } from "lucide-react";
 
 const About = () => {
   return (
@@ -90,6 +90,146 @@ const About = () => {
                       <h3 className="font-semibold mb-2">Make Informed Choices</h3>
                       <p className="text-muted-foreground">
                         Use our recommendations to help guide your educational decisions.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+          
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold mb-6">Our Advanced Features</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <LineChart className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Grade Improvement Simulator</h3>
+                      <p className="text-muted-foreground">
+                        See how improving specific grades could unlock new university opportunities. Experiment with different grade combinations to view potential UCAS point increases.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <CheckCircle2 className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Interactive Requirements Cards</h3>
+                      <p className="text-muted-foreground">
+                        Detailed breakdowns of course requirements, showing how your grades match up to specific university entry criteria with visual indicators.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <BarChart className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Course Comparison Tool</h3>
+                      <p className="text-muted-foreground">
+                        Compare multiple courses side-by-side to evaluate differences in entry requirements, duration, and other key factors to make better decisions.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <Download className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Export Results</h3>
+                      <p className="text-muted-foreground">
+                        Save your course matches and UCAS points calculation as a downloadable file to reference later or share with parents, teachers, and advisors.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <Globe className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Regional Filtering</h3>
+                      <p className="text-muted-foreground">
+                        Filter university recommendations by location preferences, including UK regions and international options, to focus your search on areas that interest you.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <Calculator className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">UCAS Points Calculator</h3>
+                      <p className="text-muted-foreground">
+                        Automatically calculate your UCAS points from A-Level grades and extracurricular activities to see where you stand in the university admissions process.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+          
+          <section className="mb-10">
+            <h2 className="text-2xl font-bold mb-6">Coming Soon</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-amber-100 p-3 rounded-full">
+                      <BookmarkCheck className="h-6 w-6 text-amber-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">University Timeline View</h3>
+                      <p className="text-muted-foreground">
+                        Visual timeline showing application deadlines and key dates for matched universities to help with planning.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-amber-100 p-3 rounded-full">
+                      <Award className="h-6 w-6 text-amber-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Personal Statement Assistant</h3>
+                      <p className="text-muted-foreground">
+                        Get tailored advice for your personal statement based on your subject strengths and university choices.
                       </p>
                     </div>
                   </div>
