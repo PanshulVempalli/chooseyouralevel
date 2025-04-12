@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -11,18 +10,18 @@ import { matchGradesToCourses, SubjectGrade, ExtraCurricular } from "@/utils/mat
 import { subjects } from "@/data/subjects";
 import { Badge } from "@/components/ui/badge";
 import ExtraCurricularSelector from "@/components/ExtraCurricularSelector";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import GradeImprovementSimulator from "@/components/GradeImprovementSimulator";
 import CourseComparisonTool from "@/components/CourseComparisonTool";
 import InteractiveRequirementsCard from "@/components/InteractiveRequirementsCard";
 import ExportResultsButton from "@/components/ExportResultsButton";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const GradeCalculator = () => {
   const [selectedGrades, setSelectedGrades] = useState<SubjectGrade[]>([]);
   const [extraActivities, setExtraActivities] = useState<ExtraCurricular[]>([]);
-  const [regionPreference, setRegionPreference] = useState<string>("");
+  const [regionPreferences, setRegionPreferences] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
   const [matchedCourses, setMatchedCourses] = useState<{ courses: any[], ucasPoints: number }>({ courses: [], ucasPoints: 0 });
   const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
@@ -92,7 +91,19 @@ const GradeCalculator = () => {
     }
 
     try {
-      const results = matchGradesToCourses(selectedGrades, extraActivities, regionPreference);
+      const preferredRegion = regionPreferences.length > 0 ? regionPreferences[0] : "";
+      const results = matchGradesToCourses(selectedGrades, extraActivities, preferredRegion);
+      
+      if (regionPreferences.length > 0 && !regionPreferences.includes("none")) {
+        results.courses = results.courses.filter((course: any) => {
+          const courseRegion = getUniversityRegion(course.university || "");
+          return regionPreferences.some(region => 
+            courseRegion === region || 
+            (region === "UK" && courseRegion.includes("UK"))
+          );
+        });
+      }
+      
       setMatchedCourses(results);
       setShowResults(true);
 
@@ -206,6 +217,22 @@ const GradeCalculator = () => {
     return "Other";
   };
 
+  const toggleRegion = (region: string) => {
+    setRegionPreferences(prev => {
+      if (region === "none") {
+        return prev.includes("none") ? [] : ["none"];
+      }
+      
+      const newPreferences = prev.filter(r => r !== "none");
+      
+      if (newPreferences.includes(region)) {
+        return newPreferences.filter(r => r !== region);
+      } else {
+        return [...newPreferences, region];
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
@@ -247,27 +274,29 @@ const GradeCalculator = () => {
                         <h3 className="font-medium text-lg">Location Preferences</h3>
                       </div>
                       <p className="text-muted-foreground text-sm mb-4">
-                        Select your preferred region to find universities that match your grades in that area
+                        Select your preferred regions to find universities that match your grades in those areas
                       </p>
                       
                       <div className="grid grid-cols-1 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="region">Preferred Region</Label>
-                          <Select
-                            value={regionPreference}
-                            onValueChange={setRegionPreference}
-                          >
-                            <SelectTrigger id="region" className="w-full">
-                              <SelectValue placeholder="Select a region (optional)" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {regions.map((region) => (
-                                <SelectItem key={region.value} value={region.value}>
+                        <div className="space-y-4">
+                          <Label htmlFor="region" className="text-base font-medium">Preferred Regions (select multiple)</Label>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-2">
+                            {regions.map((region) => (
+                              <div key={region.value} className="flex items-center space-x-2">
+                                <Checkbox 
+                                  id={`region-${region.value}`} 
+                                  checked={regionPreferences.includes(region.value)}
+                                  onCheckedChange={() => toggleRegion(region.value)}
+                                />
+                                <label
+                                  htmlFor={`region-${region.value}`}
+                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                                >
                                   {region.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                                </label>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -319,12 +348,15 @@ const GradeCalculator = () => {
                       <span className="text-muted-foreground">Total UCAS Points:</span> {matchedCourses.ucasPoints}
                     </div>
                   </div>
-                  {regionPreference && (
-                    <div className="mt-2">
-                      <Badge variant="outline" className="bg-blue-50 text-blue-800">
-                        <Globe className="mr-1 h-3 w-3" /> 
-                        Region: {regions.find(r => r.value === regionPreference)?.label || regionPreference}
-                      </Badge>
+                  {regionPreferences.length > 0 && !regionPreferences.includes("none") && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      <span className="text-muted-foreground text-sm">Regions:</span>
+                      {regionPreferences.map(region => (
+                        <Badge key={region} variant="outline" className="bg-blue-50 text-blue-800">
+                          <Globe className="mr-1 h-3 w-3" /> 
+                          {regions.find(r => r.value === region)?.label || region}
+                        </Badge>
+                      ))}
                     </div>
                   )}
                 </div>
@@ -334,12 +366,11 @@ const GradeCalculator = () => {
                     selectedGrades={selectedGrades}
                     matchedCourses={matchedCourses.courses}
                     ucasPoints={matchedCourses.ucasPoints}
-                    regionPreference={regionPreference}
+                    regionPreference={regionPreferences.join(", ")}
                   />
                 </div>
               </div>
               
-              {/* New Grade Improvement Simulator */}
               <div className="mb-8">
                 <GradeImprovementSimulator 
                   currentGrades={selectedGrades}
@@ -390,7 +421,6 @@ const GradeCalculator = () => {
                               
                               <p className="text-sm mb-4">{course.description}</p>
                               
-                              {/* Interactive Requirements Card - Show on click */}
                               <Button 
                                 variant="outline" 
                                 size="sm"

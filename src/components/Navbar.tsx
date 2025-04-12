@@ -16,11 +16,11 @@ const Navbar = () => {
           <Link to="/" className="font-medium hover:text-education-primary transition-colors">
             Home
           </Link>
-          <Link to="/subjects" className="font-medium hover:text-education-primary transition-colors">
-            Subjects
-          </Link>
           <Link to="/about" className="font-medium hover:text-education-primary transition-colors">
             About
+          </Link>
+          <Link to="/subjects" className="font-medium hover:text-education-primary transition-colors">
+            Subjects
           </Link>
         </div>
 
