@@ -19,7 +19,9 @@ import {
   Building,
   Clock,
   Calendar,
-  School
+  School,
+  LightbulbIcon,
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -143,57 +145,83 @@ const Index = () => {
       <main className="flex-grow">
         {!showResults ? (
           <>
-            <section className="bg-gradient-to-r from-education-light to-blue-50 py-16 md:py-24">
-              <div className="container px-4">
+            <section className="bg-gradient-to-r from-education-light to-blue-50 py-24 md:py-32 hero-pattern relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/0 to-white/40 pointer-events-none"></div>
+              
+              <div className="container px-4 relative z-10">
                 <div className="max-w-3xl mx-auto text-center">
-                  <h1 className="text-4xl md:text-5xl font-bold mb-6 gradient-text">
+                  <div className="mb-4 inline-flex items-center px-4 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium animate-float">
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    <span>Find your perfect academic path</span>
+                  </div>
+                  
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-8 leading-tight tracking-tight gradient-text">
                     Find Your Perfect A-Level Path
                   </h1>
-                  <p className="text-xl mb-10 text-gray-700">
+                  
+                  <p className="text-xl md:text-2xl mb-12 text-gray-700 max-w-2xl mx-auto">
                     Choose your A-Level subjects and discover which university courses and careers 
                     they could lead to.
                   </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  
+                  <div className="flex flex-col sm:flex-row gap-6 justify-center">
                     <Button 
-                      size="lg" 
-                      className="text-lg bg-education-primary hover:bg-education-primary/90"
+                      variant="gradient"
+                      size="xl"
+                      className="rounded-lg shadow-lg"
                       onClick={() => document.getElementById("subject-selector")?.scrollIntoView({ behavior: "smooth" })}
                     >
-                      Get Started <ArrowRight className="ml-2" size={18} />
+                      Get Started <ArrowRight className="ml-2" size={20} />
                     </Button>
+                    
                     <Link to="/grade-calculator">
                       <Button 
-                        size="lg" 
-                        className="text-lg"
+                        size="xl"
+                        className="rounded-lg border-2 border-gray-200 bg-white text-gray-800 hover:bg-gray-50 shadow-md"
                         variant="outline"
                       >
-                        I Already Have My Grades <Calculator className="ml-2" size={18} />
+                        I Already Have My Grades <Calculator className="ml-2" size={20} />
                       </Button>
                     </Link>
                   </div>
                 </div>
+                
+                {/* Floating Elements */}
+                <div className="hidden lg:block absolute -bottom-16 left-16 w-32 h-32 bg-education-primary/5 rounded-full blur-3xl"></div>
+                <div className="hidden lg:block absolute -top-20 right-24 w-40 h-40 bg-education-secondary/5 rounded-full blur-3xl"></div>
+                <div className="hidden lg:block absolute bottom-10 right-10 w-24 h-24 bg-education-accent/10 rounded-full blur-2xl"></div>
               </div>
             </section>
 
             {/* Featured Pathways Carousel */}
-            <section className="py-16 bg-white">
+            <section className="py-20 bg-white">
               <div className="container px-4">
                 <div className="max-w-6xl mx-auto">
-                  <h2 className="text-3xl font-bold text-center mb-8">
-                    Explore Featured Pathways
-                  </h2>
-                  <p className="text-lg text-center text-gray-600 mb-10 max-w-3xl mx-auto">
-                    Discover popular career and study paths based on A-Level combinations
-                  </p>
+                  <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+                    <div>
+                      <div className="inline-flex items-center px-3 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium mb-4">
+                        <Star className="h-4 w-4 mr-2" />
+                        <span>Explore options</span>
+                      </div>
+                      <h2 className="text-3xl font-bold mb-2">
+                        Featured Pathways
+                      </h2>
+                      <p className="text-lg text-gray-600 max-w-2xl">
+                        Discover popular career and study paths based on A-Level combinations
+                      </p>
+                    </div>
+                  </div>
                   
                   <div className="md:px-10">
                     <Carousel className="w-full">
                       <CarouselContent>
                         {featuredPathways.map((pathway) => (
                           <CarouselItem key={pathway.id} className="md:basis-1/2 lg:basis-1/3">
-                            <Card className="h-full border-2 border-gray-100 hover:border-education-primary/20 transition-all">
-                              <CardContent className="p-6 flex flex-col h-full">
-                                <div className="mb-4">{pathway.icon}</div>
+                            <Card className="h-full border-0 shadow-lg card-hover fancy-border-gradient">
+                              <CardContent className="p-8 flex flex-col h-full">
+                                <div className="mb-4 p-3 rounded-full bg-education-primary/10 w-16 h-16 flex items-center justify-center">
+                                  {pathway.icon}
+                                </div>
                                 <h3 className="text-xl font-bold mb-3">{pathway.title}</h3>
                                 <p className="text-gray-600 mb-4 flex-grow">{pathway.description}</p>
                                 <div>
@@ -214,35 +242,44 @@ const Index = () => {
                           </CarouselItem>
                         ))}
                       </CarouselContent>
-                      <CarouselPrevious className="-left-4 md:-left-6" />
-                      <CarouselNext className="-right-4 md:-right-6" />
+                      <CarouselPrevious className="-left-4 md:-left-6 bg-white shadow-md border-0" />
+                      <CarouselNext className="-right-4 md:-right-6 bg-white shadow-md border-0" />
                     </Carousel>
                   </div>
                 </div>
               </div>
             </section>
 
-            <section className="py-16 bg-gray-50">
+            <section className="py-20 bg-gray-50">
               <div className="container px-4">
-                <div className="max-w-5xl mx-auto">
-                  <h2 className="text-3xl font-bold text-center mb-12">
-                    How It Works
-                  </h2>
+                <div className="max-w-6xl mx-auto relative">
+                  <div className="mb-16 text-center">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium mb-4">
+                      <LightbulbIcon className="h-4 w-4 mr-2" />
+                      <span>Simple steps</span>
+                    </div>
+                    <h2 className="text-3xl font-bold mb-4">
+                      How It Works
+                    </h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                      Our platform makes it easy to discover the right educational path for your future
+                    </p>
+                  </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
                     {/* Connection line (desktop only) */}
                     <div className="hidden md:block absolute top-24 left-1/6 right-1/6 h-0.5 bg-education-primary/30" />
                     
-                    <div className="text-center relative">
-                      <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-4 border-4 border-white z-10 relative">
+                    <div className="text-center relative card-hover glass-card p-8 rounded-xl">
+                      <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-6 border-4 border-white z-10 relative">
                         <BookOpen className="h-8 w-8 text-education-primary" />
                       </div>
                       <h3 className="text-xl font-semibold mb-3">1. Select Subjects</h3>
                       <p className="text-gray-600">
                         Choose 3-4 A-Level subjects that you're interested in studying or are already taking.
                       </p>
-                      <div className="mt-4 px-6">
-                        <ul className="text-left text-sm text-gray-600 space-y-2">
+                      <div className="mt-6 px-6">
+                        <ul className="text-left text-sm text-gray-600 space-y-3">
                           <li className="flex items-start">
                             <ChevronRight className="h-4 w-4 text-education-primary mt-0.5 mr-1 flex-shrink-0" />
                             <span>Browse our comprehensive list of subjects</span>
@@ -259,16 +296,16 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    <div className="text-center relative">
-                      <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-4 border-4 border-white z-10 relative">
+                    <div className="text-center relative card-hover glass-card p-8 rounded-xl">
+                      <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-6 border-4 border-white z-10 relative">
                         <GraduationCap className="h-8 w-8 text-education-primary" />
                       </div>
                       <h3 className="text-xl font-semibold mb-3">2. Explore Courses</h3>
                       <p className="text-gray-600">
                         Discover which university degrees match well with your chosen subject combination.
                       </p>
-                      <div className="mt-4 px-6">
-                        <ul className="text-left text-sm text-gray-600 space-y-2">
+                      <div className="mt-6 px-6">
+                        <ul className="text-left text-sm text-gray-600 space-y-3">
                           <li className="flex items-start">
                             <ChevronRight className="h-4 w-4 text-education-primary mt-0.5 mr-1 flex-shrink-0" />
                             <span>View detailed course requirements</span>
@@ -285,16 +322,16 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    <div className="text-center">
-                      <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-4 border-4 border-white z-10 relative">
+                    <div className="text-center card-hover glass-card p-8 rounded-xl">
+                      <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-6 border-4 border-white z-10 relative">
                         <Award className="h-8 w-8 text-education-primary" />
                       </div>
                       <h3 className="text-xl font-semibold mb-3">3. Discover Careers</h3>
                       <p className="text-gray-600">
                         Find potential career paths that your A-Level choices could lead to in the future.
                       </p>
-                      <div className="mt-4 px-6">
-                        <ul className="text-left text-sm text-gray-600 space-y-2">
+                      <div className="mt-6 px-6">
+                        <ul className="text-left text-sm text-gray-600 space-y-3">
                           <li className="flex items-start">
                             <ChevronRight className="h-4 w-4 text-education-primary mt-0.5 mr-1 flex-shrink-0" />
                             <span>Explore job opportunities and requirements</span>
@@ -316,24 +353,30 @@ const Index = () => {
             </section>
 
             {/* UK University Admissions Quick Facts */}
-            <section className="py-16 bg-white">
+            <section className="py-20 bg-white">
               <div className="container px-4">
-                <div className="max-w-5xl mx-auto">
-                  <h2 className="text-3xl font-bold text-center mb-8">
-                    UK University Admissions Quick Facts
-                  </h2>
-                  <p className="text-lg text-center text-gray-600 mb-10 max-w-3xl mx-auto">
-                    Important information to keep in mind when planning your university applications
-                  </p>
+                <div className="max-w-6xl mx-auto">
+                  <div className="mb-16 text-center">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium mb-4">
+                      <Info className="h-4 w-4 mr-2" />
+                      <span>Good to know</span>
+                    </div>
+                    <h2 className="text-3xl font-bold mb-4">
+                      UK University Admissions Quick Facts
+                    </h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                      Important information to keep in mind when planning your university applications
+                    </p>
+                  </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {admissionsFacts.map((item) => (
-                      <Card key={item.id} className="border-2 border-gray-100">
-                        <CardContent className="p-6 flex flex-col items-center text-center">
-                          <div className="mb-4 bg-education-primary/10 p-3 rounded-full">
+                      <Card key={item.id} className="border-0 shadow-md hover:shadow-xl transition-all card-hover">
+                        <CardContent className="p-8 flex flex-col items-center text-center">
+                          <div className="mb-4 bg-education-primary/10 p-4 rounded-full">
                             {item.icon}
                           </div>
-                          <p className="text-gray-800">{item.fact}</p>
+                          <p className="text-gray-800 font-medium">{item.fact}</p>
                         </CardContent>
                       </Card>
                     ))}
@@ -343,28 +386,36 @@ const Index = () => {
             </section>
 
             {/* Testimonials section */}
-            <section className="py-16 bg-gray-50">
-              <div className="container px-4">
-                <div className="max-w-5xl mx-auto">
-                  <h2 className="text-3xl font-bold text-center mb-6">
-                    What Students Say
-                  </h2>
-                  <p className="text-lg text-center text-gray-600 mb-12 max-w-3xl mx-auto">
-                    Hear from students who have used A-Level Pathfinder to help guide their academic and career decisions
-                  </p>
+            <section className="py-20 bg-gray-50 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-full hero-pattern opacity-50 pointer-events-none"></div>
+              
+              <div className="container px-4 relative z-10">
+                <div className="max-w-6xl mx-auto">
+                  <div className="mb-16 text-center">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium mb-4">
+                      <Users className="h-4 w-4 mr-2" />
+                      <span>Success stories</span>
+                    </div>
+                    <h2 className="text-3xl font-bold mb-4">
+                      What Students Say
+                    </h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                      Hear from students who have used A-Level Pathfinder to help guide their academic and career decisions
+                    </p>
+                  </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {testimonials.map((testimonial) => (
-                      <Card key={testimonial.id} className="border-2 border-gray-100">
-                        <CardContent className="p-6">
-                          <div className="flex mb-4">
+                      <Card key={testimonial.id} className="border-0 shadow-lg fancy-border-gradient card-hover">
+                        <CardContent className="p-8">
+                          <div className="flex mb-6">
                             {[...Array(testimonial.rating)].map((_, i) => (
                               <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
                             ))}
                           </div>
-                          <p className="italic text-gray-600 mb-6">"{testimonial.text}"</p>
+                          <p className="italic text-gray-600 mb-8 text-lg">"{testimonial.text}"</p>
                           <div className="flex items-center">
-                            <div className="bg-education-primary/20 rounded-full h-10 w-10 flex items-center justify-center mr-3">
+                            <div className="bg-education-primary/20 rounded-full h-12 w-12 flex items-center justify-center mr-4">
                               <Users className="h-5 w-5 text-education-primary" />
                             </div>
                             <div>
@@ -380,17 +431,30 @@ const Index = () => {
               </div>
             </section>
             
-            <section className="py-16 bg-gray-50" id="subject-selector">
+            <section className="py-24 bg-gray-50" id="subject-selector">
               <div className="container px-4">
-                <h2 className="text-3xl font-bold text-center mb-10">
-                  Select Your A-Level Subjects
-                </h2>
-                
-                <SubjectSelector 
-                  selectedSubjects={selectedSubjects}
-                  setSelectedSubjects={setSelectedSubjects}
-                  onSubmit={handleFindPathways}
-                />
+                <div className="max-w-4xl mx-auto">
+                  <div className="text-center mb-12">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium mb-4">
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      <span>Get personalized guidance</span>
+                    </div>
+                    <h2 className="text-3xl font-bold mb-4">
+                      Select Your A-Level Subjects
+                    </h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                      Choose at least 3 subjects to get personalized university and career recommendations
+                    </p>
+                  </div>
+                  
+                  <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
+                    <SubjectSelector 
+                      selectedSubjects={selectedSubjects}
+                      setSelectedSubjects={setSelectedSubjects}
+                      onSubmit={handleFindPathways}
+                    />
+                  </div>
+                </div>
               </div>
             </section>
           </>
