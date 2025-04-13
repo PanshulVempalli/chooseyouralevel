@@ -22,12 +22,16 @@ const Navbar = () => {
     };
   }, []);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <nav className={`sticky top-0 z-10 transition-all duration-300 ${
       scrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
     }`}>
       <div className="container flex justify-between items-center h-16 px-4">
-        <Link to="/" className="flex items-center gap-2 group">
+        <Link to="/" className="flex items-center gap-2 group" onClick={scrollToTop}>
           <div className="bg-education-primary/10 p-2 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
             <GraduationCap size={24} className="text-education-primary" />
           </div>
@@ -35,19 +39,19 @@ const Navbar = () => {
         </Link>
         
         <div className="hidden md:flex space-x-8">
-          <Link to="/" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+          <Link to="/" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Home
           </Link>
-          <Link to="/about" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+          <Link to="/about" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             About
           </Link>
-          <Link to="/subjects" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+          <Link to="/subjects" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Subjects
           </Link>
-          <Link to="/grade-calculator" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+          <Link to="/grade-calculator" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Grade Calculator
           </Link>
-          <Link to="/guidance" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+          <Link to="/guidance" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Guidance
           </Link>
         </div>
@@ -56,7 +60,9 @@ const Navbar = () => {
           <Button 
             variant="gradient"
             className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300"
-            onClick={() => window.location.href = '/#subject-selector'}
+            onClick={() => {
+              window.location.href = '/#subject-selector';
+            }}
           >
             Get Started
           </Button>
