@@ -104,7 +104,7 @@
 }
 
 .card-hover {
-  transition: all 0.3s ease;
+  @apply transition-all duration-300;
 }
 
 .card-hover:hover {
@@ -113,7 +113,7 @@
 }
 
 .glass-card {
-  @apply bg-white bg-opacity-70 backdrop-blur-sm border border-gray-100;
+  @apply bg-white bg-opacity-70 backdrop-blur-sm border border-gray-100 shadow-sm rounded-xl;
 }
 
 .animate-float {
@@ -134,8 +134,9 @@
 
 .fancy-border-gradient {
   position: relative;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   z-index: 0;
+  overflow: hidden;
 }
 
 .fancy-border-gradient::before {
@@ -143,7 +144,7 @@
   position: absolute;
   inset: -2px;
   z-index: -1;
-  border-radius: 0.6rem;
+  border-radius: 0.85rem;
   background: linear-gradient(135deg, #1e40af 0%, #0f766e 50%, #eab308 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -181,4 +182,42 @@
   100% {
     transform: rotate(30deg) translateY(-100%) translateX(200%);
   }
+}
+
+/* Enhanced animations */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.7s ease-out forwards;
+}
+
+/* Staggered animations */
+.animate-fade-in:nth-child(1) { animation-delay: 0.1s; }
+.animate-fade-in:nth-child(2) { animation-delay: 0.2s; }
+.animate-fade-in:nth-child(3) { animation-delay: 0.3s; }
+.animate-fade-in:nth-child(4) { animation-delay: 0.4s; }
+.animate-fade-in:nth-child(5) { animation-delay: 0.5s; }
+
+/* Fluid typography */
+html {
+  font-size: clamp(15px, 0.9rem + 0.2vw, 18px);
+}
+
+/* Enhanced inputs */
+input:focus, textarea:focus, select:focus {
+  @apply outline-none ring-2 ring-education-primary/20 transition-all duration-300;
+}
+
+/* Improved section spacing */
+section {
+  @apply py-8 md:py-12 lg:py-16;
 }

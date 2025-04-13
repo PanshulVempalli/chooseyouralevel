@@ -2,35 +2,60 @@
 import { Link } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useState, useEffect } from "react";
 
 const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <nav className="border-b shadow-sm sticky top-0 z-10 bg-background/95 backdrop-blur-sm">
+    <nav className={`sticky top-0 z-10 transition-all duration-300 ${
+      scrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
+    }`}>
       <div className="container flex justify-between items-center h-16 px-4">
-        <Link to="/" className="flex items-center gap-2">
-          <GraduationCap size={28} className="text-education-primary" />
-          <span className="font-bold text-xl text-education-primary">A-Level Pathfinder</span>
+        <Link to="/" className="flex items-center gap-2 group">
+          <div className="bg-education-primary/10 p-2 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
+            <GraduationCap size={24} className="text-education-primary" />
+          </div>
+          <span className="font-bold text-xl gradient-text">A-Level Pathfinder</span>
         </Link>
         
-        <div className="hidden md:flex space-x-6">
-          <Link to="/" className="font-medium hover:text-education-primary transition-colors">
+        <div className="hidden md:flex space-x-8">
+          <Link to="/" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Home
           </Link>
-          <Link to="/about" className="font-medium hover:text-education-primary transition-colors">
+          <Link to="/about" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             About
           </Link>
-          <Link to="/subjects" className="font-medium hover:text-education-primary transition-colors">
+          <Link to="/subjects" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Subjects
           </Link>
-          <Link to="/guidance" className="font-medium hover:text-education-primary transition-colors">
+          <Link to="/grade-calculator" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            Grade Calculator
+          </Link>
+          <Link to="/guidance" className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Guidance
           </Link>
         </div>
 
         <div className="flex items-center">
           <Button 
-            variant="default" 
-            className="bg-education-primary hover:bg-education-primary/90"
+            variant="gradient"
+            className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300"
             onClick={() => window.location.href = '/#subject-selector'}
           >
             Get Started

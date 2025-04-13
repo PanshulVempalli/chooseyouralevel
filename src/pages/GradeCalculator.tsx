@@ -124,26 +124,28 @@ const GradeCalculator = () => {
           {!showResults ? (
             <>
               <div className="max-w-3xl mx-auto mb-12 text-center">
-                <h1 className="text-4xl font-bold mb-6 gradient-text">
+                <h1 className="text-4xl font-bold mb-6 gradient-text animate-fade-in">
                   UCAS Points Calculator
                 </h1>
-                <p className="text-xl mb-8 text-gray-700">
+                <p className="text-lg mb-8 text-muted-foreground animate-fade-in">
                   Enter your A-Level grades and extracurricular activities to see which university courses you're qualified for
                 </p>
               </div>
               
-              <GradeCalculatorForm
-                selectedGrades={selectedGrades}
-                setSelectedGrades={setSelectedGrades}
-                extraActivities={extraActivities}
-                setExtraActivities={setExtraActivities}
-                regionPreferences={regionPreferences}
-                toggleRegion={toggleRegion}
-                handleFindCourses={handleFindCourses}
-              />
+              <div className="animate-fade-in">
+                <GradeCalculatorForm
+                  selectedGrades={selectedGrades}
+                  setSelectedGrades={setSelectedGrades}
+                  extraActivities={extraActivities}
+                  setExtraActivities={setExtraActivities}
+                  regionPreferences={regionPreferences}
+                  toggleRegion={toggleRegion}
+                  handleFindCourses={handleFindCourses}
+                />
+              </div>
             </>
           ) : (
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto animate-fade-in">
               <ResultsHeader
                 selectedGrades={selectedGrades}
                 matchedCourses={matchedCourses.courses}
@@ -163,17 +165,21 @@ const GradeCalculator = () => {
               </div>
 
               {!matchedCourses.courses || matchedCourses.courses.length === 0 ? (
-                <Card>
+                <Card className="fancy-border-gradient">
                   <CardContent className="pt-6 text-center">
                     <p className="mb-4">No matching courses found for your grades. Try selecting different subjects or consider courses with lower entry requirements.</p>
-                    <Button onClick={resetResults}>Try Again</Button>
+                    <Button onClick={resetResults} variant="gradient">Try Again</Button>
                   </CardContent>
                 </Card>
               ) : (
                 <Tabs defaultValue="list" className="w-full mb-8">
-                  <TabsList className="w-full mb-4">
-                    <TabsTrigger value="list" className="flex-1">Course List</TabsTrigger>
-                    <TabsTrigger value="compare" className="flex-1">Compare Courses</TabsTrigger>
+                  <TabsList className="w-full mb-4 bg-education-dark/5 p-1">
+                    <TabsTrigger value="list" className="flex-1 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                      Course List
+                    </TabsTrigger>
+                    <TabsTrigger value="compare" className="flex-1 data-[state=active]:bg-background data-[state=active]:shadow-sm">
+                      Compare Courses
+                    </TabsTrigger>
                   </TabsList>
                   
                   <TabsContent value="list" className="mt-0">

@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,30 +8,42 @@ const About = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
-      <main className="flex-grow container py-8 px-4">
+      <main className="flex-grow container py-12 px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-6 gradient-text">About A-Level Pathfinder</h1>
+          <div className="text-center mb-12">
+            <h1 className="text-3xl md:text-4xl font-bold mb-6 gradient-text animate-fade-in">
+              About A-Level Pathfinder
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-fade-in">
+              Guiding you through the crucial decisions that shape your academic future
+            </p>
+          </div>
           
-          <section className="mb-10">
-            <p className="text-lg mb-6">
-              A-Level Pathfinder is designed to help UK students make informed decisions 
-              about which A-Level subjects to choose based on their future university 
-              and career aspirations.
-            </p>
-            
-            <p className="mb-6">
-              Choosing the right A-Levels is a crucial decision that can significantly 
-              impact your future educational and career opportunities. Our tool helps 
-              you understand the connections between your subject choices and the doors 
-              they can open for you.
-            </p>
+          <section className="mb-16 animate-fade-in">
+            <div className="bg-gradient-to-r from-education-primary/10 to-education-secondary/10 p-8 rounded-2xl mb-8 glass-card">
+              <p className="text-lg mb-6">
+                A-Level Pathfinder is designed to help UK students make informed decisions 
+                about which A-Level subjects to choose based on their future university 
+                and career aspirations.
+              </p>
+              
+              <p className="mb-6">
+                Choosing the right A-Levels is a crucial decision that can significantly 
+                impact your future educational and career opportunities. Our tool helps 
+                you understand the connections between your subject choices and the doors 
+                they can open for you.
+              </p>
+            </div>
           </section>
           
-          <section className="mb-10">
-            <h2 className="text-2xl font-bold mb-6">How It Works</h2>
+          <section className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-3 inline-block gradient-text">How It Works</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-education-primary to-education-secondary rounded-full mx-auto"></div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -48,7 +59,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -64,7 +75,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -80,7 +91,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -98,11 +109,14 @@ const About = () => {
             </div>
           </section>
           
-          <section className="mb-10">
-            <h2 className="text-2xl font-bold mb-6">Our Advanced Features</h2>
+          <section className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-3 inline-block gradient-text">Our Advanced Features</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-education-primary to-education-secondary rounded-full mx-auto"></div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -118,7 +132,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -134,7 +148,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -150,7 +164,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -166,7 +180,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -182,7 +196,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-education-primary/10 p-3 rounded-full">
@@ -200,11 +214,14 @@ const About = () => {
             </div>
           </section>
           
-          <section className="mb-10">
-            <h2 className="text-2xl font-bold mb-6">Coming Soon</h2>
+          <section className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-3 inline-block gradient-text">Coming Soon</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-education-primary to-education-secondary rounded-full mx-auto"></div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-amber-100 p-3 rounded-full">
@@ -220,7 +237,7 @@ const About = () => {
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="bg-amber-100 p-3 rounded-full">
@@ -239,24 +256,29 @@ const About = () => {
           </section>
           
           <section className="mb-10">
-            <h2 className="text-2xl font-bold mb-4">Important Notes</h2>
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-3 inline-block gradient-text">Important Notes</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-education-primary to-education-secondary rounded-full mx-auto"></div>
+            </div>
             
-            <ul className="list-disc list-inside space-y-3 pl-4">
-              <li>
-                Our recommendations are suggestions based on typical requirements, but 
-                university entry requirements can vary. Always check with specific 
-                institutions for their exact requirements.
-              </li>
-              <li>
-                Some highly competitive courses may have additional requirements beyond 
-                specific A-Level subjects, such as admissions tests or portfolios.
-              </li>
-              <li>
-                This tool should be used as one resource among many when making educational 
-                decisions. We encourage you to also speak with teachers, career advisors, 
-                and university admissions offices.
-              </li>
-            </ul>
+            <div className="bg-gradient-to-r from-education-primary/10 to-education-secondary/10 p-8 rounded-2xl mb-8 glass-card">
+              <ul className="list-disc list-inside space-y-3 pl-4">
+                <li>
+                  Our recommendations are suggestions based on typical requirements, but 
+                  university entry requirements can vary. Always check with specific 
+                  institutions for their exact requirements.
+                </li>
+                <li>
+                  Some highly competitive courses may have additional requirements beyond 
+                  specific A-Level subjects, such as admissions tests or portfolios.
+                </li>
+                <li>
+                  This tool should be used as one resource among many when making educational 
+                  decisions. We encourage you to also speak with teachers, career advisors, 
+                  and university admissions offices.
+                </li>
+              </ul>
+            </div>
           </section>
         </div>
       </main>
