@@ -64,8 +64,8 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				education: {
-					primary: '#1EAEDB',
-					secondary: '#33C3F0',
+					primary: '#0A84FF',
+					secondary: '#0A6EDA',
 					accent: '#eab308',
 					light: '#E6F2FF',
 					dark: '#1e293b'
