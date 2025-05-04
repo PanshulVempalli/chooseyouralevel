@@ -58,8 +58,7 @@ const Navbar = () => {
 
         <div className="flex items-center">
           <Button 
-            variant="gradient"
-            className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300"
+            className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300 bg-gradient-to-r from-education-primary to-education-secondary text-white"
             onClick={() => {
               window.location.href = '/#subject-selector';
             }}
