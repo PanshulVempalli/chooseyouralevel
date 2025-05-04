@@ -72,7 +72,7 @@ const Subjects = () => {
                       <AccordionContent>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                           {categorySubjects.map((subject) => (
-                            <Card key={subject.id} className="fancy-border-gradient card-hover">
+                            <Card key={subject.id} className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                               <CardHeader className="pb-2">
                                 <div className="flex items-center">
                                   <div className="bg-education-primary/10 p-1.5 rounded-full mr-2">

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -164,14 +165,15 @@ const Index = () => {
                   </p>
                   
                   <div className="flex flex-col sm:flex-row gap-6 justify-center">
-                    <Button 
-                      variant="gradient"
-                      size="xl"
-                      className="rounded-lg shadow-lg"
-                      onClick={() => document.getElementById("subject-selector")?.scrollIntoView({ behavior: "smooth" })}
-                    >
-                      Get Started <ArrowRight className="ml-2" size={20} />
-                    </Button>
+                    <Link to="/subject-selector">
+                      <Button 
+                        variant="gradient"
+                        size="xl"
+                        className="rounded-lg shadow-lg"
+                      >
+                        Get Started <ArrowRight className="ml-2" size={20} />
+                      </Button>
+                    </Link>
                     
                     <Link to="/grade-calculator">
                       <Button 
@@ -216,7 +218,7 @@ const Index = () => {
                       <CarouselContent>
                         {featuredPathways.map((pathway) => (
                           <CarouselItem key={pathway.id} className="md:basis-1/2 lg:basis-1/3">
-                            <Card className="h-full border-0 shadow-lg card-hover fancy-border-gradient">
+                            <Card className="h-full border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                               <CardContent className="p-8 flex flex-col h-full">
                                 <div className="mb-4 p-3 rounded-full bg-education-primary/10 w-16 h-16 flex items-center justify-center">
                                   {pathway.icon}
@@ -269,7 +271,7 @@ const Index = () => {
                     {/* Connection line (desktop only) */}
                     <div className="hidden md:block absolute top-24 left-1/6 right-1/6 h-0.5 bg-education-primary/30" />
                     
-                    <div className="text-center relative card-hover glass-card p-8 rounded-xl">
+                    <div className="text-center relative hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-8 rounded-xl bg-white">
                       <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-6 border-4 border-white z-10 relative">
                         <BookOpen className="h-8 w-8 text-education-primary" />
                       </div>
@@ -295,7 +297,7 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    <div className="text-center relative card-hover glass-card p-8 rounded-xl">
+                    <div className="text-center relative hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-8 rounded-xl bg-white">
                       <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-6 border-4 border-white z-10 relative">
                         <GraduationCap className="h-8 w-8 text-education-primary" />
                       </div>
@@ -321,7 +323,7 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    <div className="text-center card-hover glass-card p-8 rounded-xl">
+                    <div className="text-center hover:shadow-xl transition-all duration-300 hover:-translate-y-1 p-8 rounded-xl bg-white">
                       <div className="bg-education-primary/10 h-16 w-16 mx-auto rounded-full flex items-center justify-center mb-6 border-4 border-white z-10 relative">
                         <Award className="h-8 w-8 text-education-primary" />
                       </div>
@@ -370,7 +372,7 @@ const Index = () => {
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                     {admissionsFacts.map((item) => (
-                      <Card key={item.id} className="border-0 shadow-md hover:shadow-xl transition-all card-hover">
+                      <Card key={item.id} className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                         <CardContent className="p-8 flex flex-col items-center text-center">
                           <div className="mb-4 bg-education-primary/10 p-4 rounded-full">
                             {item.icon}
@@ -426,32 +428,34 @@ const Index = () => {
                       </Card>
                     ))}
                   </div>
+                  
+                  {/* Disclaimer */}
+                  <div className="mt-8 text-center">
+                    <p className="text-sm text-gray-500 italic p-3 bg-gray-100 rounded-md inline-block">
+                      Disclaimer: The testimonials shown are for demonstration purposes only and do not represent actual individuals or their experiences.
+                    </p>
+                  </div>
                 </div>
               </div>
             </section>
             
-            <section className="py-24 bg-gray-50" id="subject-selector">
+            <section className="py-16 bg-gray-50">
               <div className="container px-4">
-                <div className="max-w-4xl mx-auto">
-                  <div className="text-center mb-12">
-                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium mb-4">
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      <span>Get personalized guidance</span>
-                    </div>
-                    <h2 className="text-3xl font-bold mb-4">
-                      Select Your A-Level Subjects
-                    </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                      Choose at least 3 subjects to get personalized university and career recommendations
+                <div className="max-w-4xl mx-auto text-center">
+                  <div className="mb-8">
+                    <h2 className="text-3xl font-bold mb-4">Ready to Find Your Path?</h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+                      Start exploring university courses and career options based on your A-Level subjects
                     </p>
-                  </div>
-                  
-                  <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
-                    <SubjectSelector 
-                      selectedSubjects={selectedSubjects}
-                      setSelectedSubjects={setSelectedSubjects}
-                      onSubmit={handleFindPathways}
-                    />
+                    <Link to="/subject-selector">
+                      <Button 
+                        variant="gradient"
+                        size="lg"
+                        className="rounded-lg shadow-lg"
+                      >
+                        Go to Subject Selector <ArrowRight className="ml-2" size={20} />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
