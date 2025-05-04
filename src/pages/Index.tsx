@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -151,7 +150,7 @@ const Index = () => {
               <div className="container px-4 relative z-10">
                 <div className="max-w-3xl mx-auto text-center">
                   <div className="mb-4 inline-flex items-center px-4 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium animate-float">
-                    <Sparkles className="h-4 w-4 mr-2" />
+                    <Sparkles className="h-4 w-4 text-education-primary" />
                     <span>Find your perfect academic path</span>
                   </div>
                   
@@ -385,7 +384,7 @@ const Index = () => {
               </div>
             </section>
 
-            {/* Testimonials section */}
+            {/* Testimonials section - Modified hover effect */}
             <section className="py-20 bg-gray-50 relative overflow-hidden">
               <div className="absolute top-0 left-0 w-full h-full hero-pattern opacity-50 pointer-events-none"></div>
               
@@ -406,7 +405,7 @@ const Index = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {testimonials.map((testimonial) => (
-                      <Card key={testimonial.id} className="border-0 shadow-lg fancy-border-gradient card-hover">
+                      <Card key={testimonial.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                         <CardContent className="p-8">
                           <div className="flex mb-6">
                             {[...Array(testimonial.rating)].map((_, i) => (
