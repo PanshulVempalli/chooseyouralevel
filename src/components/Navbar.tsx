@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import MobileMenu from "./MobileMenu";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -59,7 +60,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center">
+        <div className="hidden md:flex items-center">
           <Button 
             className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300 bg-gradient-to-r from-education-primary to-education-secondary text-white"
             onClick={() => {
@@ -69,6 +70,8 @@ const Navbar = () => {
             Get Started
           </Button>
         </div>
+        
+        <MobileMenu onLinkClick={scrollToTop} />
       </div>
     </nav>
   );

@@ -119,15 +119,15 @@ const GradeCalculator = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
-      <main className="flex-grow py-12">
+      <main className="flex-grow py-8 md:py-12">
         <div className="container px-4">
           {!showResults ? (
             <>
-              <div className="max-w-3xl mx-auto mb-12 text-center">
-                <h1 className="text-4xl font-bold mb-6 gradient-text animate-fade-in">
+              <div className="max-w-3xl mx-auto mb-8 md:mb-12 text-center">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 gradient-text animate-fade-in">
                   UCAS Points Calculator
                 </h1>
-                <p className="text-lg mb-8 text-muted-foreground animate-fade-in">
+                <p className="text-base md:text-lg mb-6 md:mb-8 text-muted-foreground animate-fade-in">
                   Enter your A-Level grades and extracurricular activities to see which university courses you're qualified for
                 </p>
               </div>
@@ -157,7 +157,7 @@ const GradeCalculator = () => {
                 resetResults={resetResults}
               />
               
-              <div className="mb-8">
+              <div className="mb-6 md:mb-8">
                 <GradeImprovementSimulator 
                   currentGrades={selectedGrades}
                   currentUcasPoints={matchedCourses.ucasPoints}
@@ -172,7 +172,7 @@ const GradeCalculator = () => {
                   </CardContent>
                 </Card>
               ) : (
-                <Tabs defaultValue="list" className="w-full mb-8">
+                <Tabs defaultValue="list" className="w-full mb-6 md:mb-8">
                   <TabsList className="w-full mb-4 bg-education-dark/5 p-1">
                     <TabsTrigger value="list" className="flex-1 data-[state=active]:bg-background data-[state=active]:shadow-sm">
                       Course List

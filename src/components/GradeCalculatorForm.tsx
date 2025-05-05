@@ -26,7 +26,7 @@ const GradeCalculatorForm = ({
   handleFindCourses,
 }: GradeCalculatorFormProps) => {
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
+    <div className="max-w-3xl mx-auto space-y-6 md:space-y-8">
       <GradeSelector
         selectedGrades={selectedGrades}
         setSelectedGrades={setSelectedGrades}
@@ -47,7 +47,7 @@ const GradeCalculatorForm = ({
         toggleRegion={toggleRegion}
       />
       
-      <div className="flex justify-between items-center p-4 bg-accent rounded-lg">
+      <div className="flex flex-col sm:flex-row justify-between items-center p-4 bg-accent rounded-lg gap-4">
         <div>
           <p className="text-sm font-medium">Total UCAS Points:</p>
           <p className="text-2xl font-bold text-education-primary">
@@ -58,6 +58,7 @@ const GradeCalculatorForm = ({
           size="lg"
           onClick={handleFindCourses}
           disabled={selectedGrades.length < 3}
+          className="w-full sm:w-auto"
         >
           Find Matching Courses
         </Button>

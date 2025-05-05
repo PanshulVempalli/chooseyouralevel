@@ -26,14 +26,14 @@ const Subjects = () => {
     <div className="flex flex-col min-h-screen">
       <Navbar />
       
-      <main className="flex-grow py-12">
+      <main className="flex-grow py-8 md:py-12">
         <div className="container px-4">
           <div className="max-w-4xl mx-auto">
-            <div className="mb-10 text-center">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4 gradient-text animate-fade-in">
+            <div className="mb-8 md:mb-10 text-center">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-3 md:mb-4 gradient-text animate-fade-in">
                 A-Level Subjects
               </h1>
-              <p className="text-lg text-muted-foreground mb-8 animate-fade-in">
+              <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 animate-fade-in">
                 Explore all available A-Level subjects and their descriptions
               </p>
               
@@ -49,7 +49,7 @@ const Subjects = () => {
               </div>
             </div>
             
-            <div className="space-y-6 animate-fade-in">
+            <div className="space-y-4 md:space-y-6 animate-fade-in">
               {subjectCategories.map((category) => {
                 const categorySubjects = filteredSubjects.filter(
                   (subject) => subject.category === category
@@ -66,11 +66,11 @@ const Subjects = () => {
                     defaultValue={searchTerm ? category : undefined}
                   >
                     <AccordionItem value={category} className="border-b border-border">
-                      <AccordionTrigger className="text-xl font-medium hover:no-underline hover:text-education-primary py-4">
-                        {category} <span className="text-sm text-muted-foreground ml-2">({categorySubjects.length})</span>
+                      <AccordionTrigger className="text-lg md:text-xl font-medium hover:no-underline hover:text-education-primary py-3 md:py-4">
+                        {category} <span className="text-xs md:text-sm text-muted-foreground ml-2">({categorySubjects.length})</span>
                       </AccordionTrigger>
                       <AccordionContent>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 pt-2">
                           {categorySubjects.map((subject) => (
                             <Card key={subject.id} className="border-0 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                               <CardHeader className="pb-2">
@@ -78,12 +78,12 @@ const Subjects = () => {
                                   <div className="bg-education-primary/10 p-1.5 rounded-full mr-2">
                                     <BookOpen className="h-4 w-4 text-education-primary" />
                                   </div>
-                                  <CardTitle className="text-lg">{subject.name}</CardTitle>
+                                  <CardTitle className="text-base md:text-lg">{subject.name}</CardTitle>
                                 </div>
                                 <CardDescription>{category}</CardDescription>
                               </CardHeader>
                               <CardContent>
-                                <p>{subject.description}</p>
+                                <p className="text-sm md:text-base">{subject.description}</p>
                               </CardContent>
                             </Card>
                           ))}
@@ -95,7 +95,7 @@ const Subjects = () => {
               })}
               
               {filteredSubjects.length === 0 && (
-                <div className="text-center py-10 glass-card p-8 rounded-xl">
+                <div className="text-center py-8 md:py-10 glass-card p-6 md:p-8 rounded-xl">
                   <p className="text-muted-foreground">No subjects found matching "{searchTerm}"</p>
                 </div>
               )}
