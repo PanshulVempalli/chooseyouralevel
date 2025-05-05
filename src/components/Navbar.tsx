@@ -38,7 +38,7 @@ const Navbar = () => {
           <span className="font-bold text-xl gradient-text">A-Level Pathfinder</span>
         </Link>
         
-        <div className="hidden md:flex space-x-8">
+        <div className="hidden md:flex space-x-5">
           <Link to="/" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Home
           </Link>
