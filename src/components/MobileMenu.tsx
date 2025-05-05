@@ -62,6 +62,13 @@ const MobileMenu = ({ onLinkClick }: MobileMenuProps) => {
                 Subject Selector
               </Link>
               <Link 
+                to="/career-to-subjects" 
+                className="text-xl font-medium hover:text-education-primary transition-colors"
+                onClick={handleLinkClick}
+              >
+                Career to Subjects
+              </Link>
+              <Link 
                 to="/grade-calculator" 
                 className="text-xl font-medium hover:text-education-primary transition-colors"
                 onClick={handleLinkClick}

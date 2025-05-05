@@ -49,6 +49,9 @@ const Navbar = () => {
           <Link to="/subject-selector" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Subject Selector
           </Link>
+          <Link to="/career-to-subjects" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            Career to Subjects
+          </Link>
           <Link to="/grade-calculator" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Grade Calculator
           </Link>

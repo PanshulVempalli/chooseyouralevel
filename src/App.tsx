@@ -10,6 +10,7 @@ import Subjects from "./pages/Subjects";
 import SubjectSelector from "./pages/SubjectSelector";
 import GradeCalculator from "./pages/GradeCalculator";
 import Guidance from "./pages/Guidance";
+import CareerToSubjects from "./pages/CareerToSubjects";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/subjects" element={<Subjects />} />
           <Route path="/subject-selector" element={<SubjectSelector />} />
           <Route path="/grade-calculator" element={<GradeCalculator />} />
+          <Route path="/career-to-subjects" element={<CareerToSubjects />} />
           <Route path="/guidance" element={<Guidance />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
