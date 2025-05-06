@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,13 +20,19 @@ import {
 import { toast } from "sonner";
 import { BookOpenText, MessageCircle, MessageSquare, SendHorizontal, Brain } from "lucide-react";
 
+// Define the chat message type
+type ChatMessage = {
+  type: "user" | "ai";
+  message: string;
+};
+
 const Guidance = () => {
   const [feedback, setFeedback] = useState("");
   const [email, setEmail] = useState("");
   const [query, setQuery] = useState("");
   const [aiResponse, setAiResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [chatHistory, setChatHistory] = useState<{type: 'user' | 'ai'; message: string}[]>([]);
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +50,7 @@ const Guidance = () => {
     if (!query.trim()) return;
     
     // Add user message to chat history
-    const newHistory = [...chatHistory, {type: 'user', message: query}];
+    const newHistory = [...chatHistory, {type: "user" as const, message: query}];
     setChatHistory(newHistory);
     
     // Show loading state
@@ -74,7 +79,7 @@ const Guidance = () => {
       });
       
       // Add AI response to chat history
-      setChatHistory([...newHistory, {type: 'ai', message: responseText}]);
+      setChatHistory([...newHistory, {type: "ai" as const, message: responseText}]);
       setQuery("");
       setIsLoading(false);
     }, 1000);
