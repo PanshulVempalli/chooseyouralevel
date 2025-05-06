@@ -1,7 +1,6 @@
 
 import { Link } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import MobileMenu from "./MobileMenu";
 
@@ -39,7 +38,7 @@ const Navbar = () => {
           <span className="font-bold text-xl gradient-text">A-Level Pathfinder</span>
         </Link>
         
-        <div className="hidden md:flex space-x-5">
+        <div className="hidden md:flex space-x-6">
           <Link to="/" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Home
           </Link>
@@ -61,17 +60,6 @@ const Navbar = () => {
           <Link to="/guidance" onClick={scrollToTop} className="font-medium hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
             Guidance
           </Link>
-        </div>
-
-        <div className="hidden md:flex items-center">
-          <Button 
-            className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300 bg-gradient-to-r from-education-primary to-education-secondary text-white"
-            onClick={() => {
-              window.location.href = '/subject-selector';
-            }}
-          >
-            Get Started
-          </Button>
         </div>
         
         <MobileMenu onLinkClick={scrollToTop} />

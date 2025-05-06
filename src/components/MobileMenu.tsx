@@ -90,17 +90,6 @@ const MobileMenu = ({ onLinkClick }: MobileMenuProps) => {
                 Guidance
               </Link>
             </div>
-            <div className="pt-6">
-              <Button 
-                className="w-full rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300 bg-gradient-to-r from-education-primary to-education-secondary text-white"
-                onClick={() => {
-                  setIsOpen(false);
-                  window.location.href = '/subject-selector';
-                }}
-              >
-                Get Started
-              </Button>
-            </div>
           </div>
         </DrawerContent>
       </Drawer>
