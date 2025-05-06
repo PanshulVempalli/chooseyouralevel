@@ -1,4 +1,6 @@
+
 import React, { useState } from "react";
+import Layout from "@/components/Layout";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,13 +19,15 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { toast } from "sonner";
-import { BookOpenText, MessageCircle, MessageSquare } from "lucide-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import { BookOpenText, MessageCircle, MessageSquare, SendHorizontal, Brain } from "lucide-react";
 
 const Guidance = () => {
   const [feedback, setFeedback] = useState("");
   const [email, setEmail] = useState("");
+  const [query, setQuery] = useState("");
+  const [aiResponse, setAiResponse] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState<{type: 'user' | 'ai'; message: string}[]>([]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,11 +39,50 @@ const Guidance = () => {
     setEmail("");
   };
 
-  return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
+  const handleAIQuery = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!query.trim()) return;
+    
+    // Add user message to chat history
+    const newHistory = [...chatHistory, {type: 'user', message: query}];
+    setChatHistory(newHistory);
+    
+    // Show loading state
+    setIsLoading(true);
+    
+    // Simulate AI response (replace with actual API call in production)
+    setTimeout(() => {
+      const responses: Record<string, string> = {
+        "ucas": "UCAS (Universities and Colleges Admissions Service) is the organization that manages applications to higher education courses in the UK. Points are allocated to post-16 qualifications and used by universities to compare students. For example, an A* at A-Level is worth 56 points, while an A is worth 48 points.",
+        "university": "Choosing the right university depends on many factors including course content, location, facilities, opportunities, and overall fit with your learning style. Our Grade Calculator can help match your predicted grades with suitable universities.",
+        "a level": "A-Levels are subject-based qualifications typically taken by UK students aged 16-18 as a pathway to university. Most students take 3-4 A-Levels over two years, with final exams at the end. They're graded from A* (highest) to E (lowest pass grade).",
+        "subject": "When choosing A-Level subjects, consider your interests, strengths, and future goals. Some degree courses require specific subjects (like Medicine requiring Chemistry), while others are more flexible. Use our Subject Selector to explore options based on your interests.",
+        "career": "Your A-Level choices can influence career paths, especially for fields like medicine, engineering, or law that require specific degree backgrounds. Our Career to Subjects feature can help you identify which A-Levels are recommended for your dream career.",
+        "grade": "A-Level grades are crucial for university applications. An A* is the highest (90%+), followed by A (80%+), B (70%+), C (60%+), D (50%+), and E (40%+). Use our Grade Calculator to see how your predicted grades match with university requirements.",
+        "default": "I'm your A-Level Pathfinder assistant, here to help with questions about A-Levels, university applications, and career pathways. Feel free to ask about specific subjects, UCAS points, university requirements, or how to use the tools on this website!"
+      };
       
-      <main className="flex-grow py-12">
+      // Very simple pattern matching for demo purposes
+      // In a real implementation, this would be replaced with an actual AI API call
+      let responseText = responses.default;
+      Object.keys(responses).forEach(key => {
+        if (query.toLowerCase().includes(key)) {
+          responseText = responses[key];
+          return;
+        }
+      });
+      
+      // Add AI response to chat history
+      setChatHistory([...newHistory, {type: 'ai', message: responseText}]);
+      setQuery("");
+      setIsLoading(false);
+    }, 1000);
+  };
+
+  return (
+    <Layout>
+      <main className="py-12">
         <div className="container px-4">
           <div className="flex items-center gap-3 mb-8 justify-center text-center">
             <div className="bg-education-primary/10 p-3 rounded-full">
@@ -49,7 +92,7 @@ const Guidance = () => {
           </div>
 
           <div className="max-w-4xl mx-auto grid gap-8 md:grid-cols-2 animate-fade-in">
-            <div>
+            <div className="order-2 md:order-1">
               <Card className="fancy-border-gradient card-hover h-full">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -127,8 +170,81 @@ const Guidance = () => {
               </Card>
             </div>
 
-            <div>
+            <div className="order-1 md:order-2">
               <Card className="fancy-border-gradient card-hover h-full">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="text-education-primary" />
+                    A-Level Assistant
+                  </CardTitle>
+                  <CardDescription>
+                    Ask questions about A-Levels, universities and careers
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-muted/30 rounded-lg p-4 mb-4 h-[250px] overflow-y-auto">
+                    {chatHistory.length === 0 ? (
+                      <div className="text-center text-muted-foreground py-10">
+                        <Brain className="mx-auto h-10 w-10 mb-2 opacity-50" />
+                        <p>Ask a question to get started</p>
+                      </div>
+                    ) : (
+                      chatHistory.map((chat, index) => (
+                        <div 
+                          key={index} 
+                          className={`mb-3 ${chat.type === 'user' ? 'text-right' : ''}`}
+                        >
+                          <div 
+                            className={`inline-block rounded-lg p-3 max-w-[85%] ${
+                              chat.type === 'user' 
+                                ? 'bg-education-primary/80 text-white' 
+                                : 'bg-muted/80'
+                            }`}
+                          >
+                            {chat.message}
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+
+                  <form onSubmit={handleAIQuery} className="mt-4">
+                    <div className="flex gap-2">
+                      <Input 
+                        placeholder="Ask about A-Levels, universities, careers..." 
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        disabled={isLoading}
+                        className="bg-muted/50 border-0 focus-visible:ring-1 focus-visible:ring-education-primary"
+                      />
+                      <Button 
+                        type="submit" 
+                        variant="gradient" 
+                        size="icon" 
+                        disabled={isLoading}
+                        className="shrink-0"
+                      >
+                        {isLoading ? (
+                          <div className="h-4 w-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <SendHorizontal size={18} />
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Try asking about UCAS points, choosing subjects, or university requirements.
+                  </p>
+                </CardContent>
+                <CardFooter className="flex flex-col items-start text-sm text-muted-foreground">
+                  <p>This is an educational assistant designed to help with general questions.</p>
+                  <p>Always verify important information with official sources.</p>
+                </CardFooter>
+              </Card>
+            </div>
+
+            <div className="order-3 md:col-span-2">
+              <Card className="fancy-border-gradient card-hover">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <MessageSquare className="text-education-primary" />
@@ -182,9 +298,7 @@ const Guidance = () => {
           </div>
         </div>
       </main>
-      
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 

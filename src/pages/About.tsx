@@ -1,14 +1,12 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+
+import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, BookOpen, Award, Users, Download, BarChart, CheckCircle2, BookmarkCheck, Globe, Calculator, LineChart } from "lucide-react";
+import { GraduationCap, BookOpen, Award, Users, Download, BarChart, CheckCircle2, BookmarkCheck, Globe, Calculator, LineChart, MessageCircle, BookOpenText, Sparkles, Brain, FileText, School } from "lucide-react";
 
 const About = () => {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Navbar />
-      
-      <main className="flex-grow container py-12 px-4">
+    <Layout>
+      <div className="container py-12 px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-6 gradient-text animate-fade-in">
@@ -211,6 +209,55 @@ const About = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* New Features */}
+              <Card className="fancy-border-gradient card-hover">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <School className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Career to Subjects Matcher</h3>
+                      <p className="text-muted-foreground">
+                        Start with your dream career and discover which A-Level subjects you should take to maximize your chances of success in that field.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="fancy-border-gradient card-hover">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <Brain className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">AI Study Assistant</h3>
+                      <p className="text-muted-foreground">
+                        Get personalized answers to your questions about A-Levels, university applications, and career pathways from our intelligent assistant.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="fancy-border-gradient card-hover">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-education-primary/10 p-3 rounded-full">
+                      <FileText className="h-6 w-6 text-education-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Subject Content Explorer</h3>
+                      <p className="text-muted-foreground">
+                        Browse detailed information about what you'll study in each A-Level subject, including key topics, assessment methods, and required skills.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </section>
           
@@ -252,6 +299,38 @@ const About = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              <Card className="fancy-border-gradient card-hover">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-amber-100 p-3 rounded-full">
+                      <Sparkles className="h-6 w-6 text-amber-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">University Open Day Finder</h3>
+                      <p className="text-muted-foreground">
+                        Discover upcoming open days at universities that match your subject interests and predicted grades.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="fancy-border-gradient card-hover">
+                <CardContent className="pt-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-amber-100 p-3 rounded-full">
+                      <MessageCircle className="h-6 w-6 text-amber-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-2">Student Community Forum</h3>
+                      <p className="text-muted-foreground">
+                        Connect with other students to share experiences, advice, and insights about A-Levels and university applications.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </section>
           
@@ -281,10 +360,8 @@ const About = () => {
             </div>
           </section>
         </div>
-      </main>
-      
-      <Footer />
-    </div>
+      </div>
+    </Layout>
   );
 };
 
