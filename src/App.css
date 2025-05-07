@@ -38,12 +38,28 @@
   padding: 2em;
 }
 
-/* Override any card hover effects to ensure consistency */
+/* Global override for ALL card hover effects */
 .card:hover,
 div[class*="card"]:hover,
-[class*="Card"]:hover {
-  @apply bg-white dark:bg-gray-900 !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+div[class*="Card"]:hover,
+[class*="card"]:hover,
+.fancy-border-gradient:hover,
+.glass-card:hover,
+.card-hover:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  background-color: white !important;
+}
+
+/* Specific rule for any card in dark mode */
+.dark .card:hover,
+.dark div[class*="card"]:hover,
+.dark div[class*="Card"]:hover,
+.dark [class*="card"]:hover,
+.dark .fancy-border-gradient:hover,
+.dark .glass-card:hover,
+.dark .card-hover:hover {
+  background-color: hsl(222.2 84% 4.9%) !important;
 }
 
 .read-the-docs {

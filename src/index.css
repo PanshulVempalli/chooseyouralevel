@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -100,17 +99,40 @@
   margin: -1px;
 }
 
-/* All card hover effects - FIXED to ONLY show shadow, no color change */
-.card-hover {
-  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg !important;
+/* Card hover styles - HIGHEST PRIORITY FIX */
+.card-hover, 
+.fancy-border-gradient, 
+.glass-card,
+[class*="card"],
+.card,
+div[class*="Card"],
+div[class*="card"] {
+  @apply transition-all duration-300 !important;
 }
 
-/* Override any other hover effects that might be causing color changes */
+/* Global hover effects that apply to ALL card elements */
 .card-hover:hover, 
 .fancy-border-gradient:hover,
 .glass-card:hover,
-[class*="card"]:hover {
-  @apply bg-white dark:bg-gray-900 !important;
+[class*="card"]:hover,
+.card:hover,
+div[class*="Card"]:hover,
+div[class*="card"]:hover {
+  @apply -translate-y-1 shadow-lg bg-white dark:bg-gray-900 !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  background-color: white !important;
+}
+
+/* Specific rule for any card in dark mode */
+.dark .card-hover:hover, 
+.dark .fancy-border-gradient:hover,
+.dark .glass-card:hover,
+.dark [class*="card"]:hover,
+.dark .card:hover,
+.dark div[class*="Card"]:hover,
+.dark div[class*="card"]:hover {
+  background-color: hsl(222.2 84% 4.9%) !important;
 }
 
 /* Path indicator styling */
@@ -134,7 +156,7 @@
     background-clip: padding-box;
     position: relative;
   }
-
+  
   .btn-outline-gradient::before {
     content: "";
     @apply absolute inset-0 rounded-[inherit] p-[1px] -z-10 bg-gradient-to-r from-education-primary to-education-secondary;
