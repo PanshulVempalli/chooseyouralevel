@@ -100,9 +100,17 @@
   margin: -1px;
 }
 
-/* Modified to only show shadow on hover, no color change */
+/* All card hover effects - FIXED to ONLY show shadow, no color change */
 .card-hover {
-  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg !important;
+}
+
+/* Override any other hover effects that might be causing color changes */
+.card-hover:hover, 
+.fancy-border-gradient:hover,
+.glass-card:hover,
+[class*="card"]:hover {
+  @apply bg-white dark:bg-gray-900 !important;
 }
 
 /* Path indicator styling */
