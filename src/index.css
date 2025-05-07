@@ -102,7 +102,7 @@
 
 /* Modified to only show shadow on hover, no color change */
 .card-hover {
-  @apply hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
+  @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-lg;
 }
 
 /* Path indicator styling */
@@ -122,7 +122,7 @@
   }
 
   .btn-outline-gradient {
-    @apply border border-transparent bg-white dark:bg-gray-900 hover:bg-gradient-to-r hover:from-education-primary hover:to-education-secondary hover:text-white;
+    @apply border border-transparent bg-white dark:bg-gray-900 hover:text-white;
     background-clip: padding-box;
     position: relative;
   }
@@ -131,5 +131,10 @@
     content: "";
     @apply absolute inset-0 rounded-[inherit] p-[1px] -z-10 bg-gradient-to-r from-education-primary to-education-secondary;
     margin: -1px;
+  }
+  
+  /* Add hover state that just changes the background to slightly darker */
+  .btn-outline-gradient:hover::before {
+    @apply bg-gradient-to-r from-education-primary/90 to-education-secondary/90;
   }
 }
