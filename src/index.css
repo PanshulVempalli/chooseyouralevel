@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,39 +100,49 @@
   margin: -1px;
 }
 
-/* Card hover styles - HIGHEST PRIORITY FIX */
+/* ======= CONSOLIDATED CARD HOVER STYLES ======= */
+/* Apply transition to all card elements */
+.card,
 .card-hover, 
 .fancy-border-gradient, 
 .glass-card,
 [class*="card"],
-.card,
-div[class*="Card"],
-div[class*="card"] {
-  @apply transition-all duration-300 !important;
+div[class*="card"],
+div[class*="Card"] {
+  transition: transform 300ms ease, box-shadow 300ms ease !important;
 }
 
-/* Global hover effects that apply to ALL card elements */
+/* Single hover style that applies to all card elements */
+.card:hover,
 .card-hover:hover, 
-.fancy-border-gradient:hover,
+.fancy-border-gradient:hover, 
 .glass-card:hover,
 [class*="card"]:hover,
-.card:hover,
-div[class*="Card"]:hover,
-div[class*="card"]:hover {
-  @apply -translate-y-1 shadow-lg bg-white dark:bg-gray-900 !important;
+div[class*="card"]:hover,
+div[class*="Card"]:hover {
   transform: translateY(-2px) !important;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Light mode - preserve white background */
+:root:not(.dark) .card:hover,
+:root:not(.dark) .card-hover:hover, 
+:root:not(.dark) .fancy-border-gradient:hover, 
+:root:not(.dark) .glass-card:hover,
+:root:not(.dark) [class*="card"]:hover,
+:root:not(.dark) div[class*="card"]:hover,
+:root:not(.dark) div[class*="Card"]:hover {
   background-color: white !important;
 }
 
-/* Specific rule for any card in dark mode */
+/* Dark mode - preserve dark background */
+.dark .card:hover,
 .dark .card-hover:hover, 
-.dark .fancy-border-gradient:hover,
+.dark .fancy-border-gradient:hover, 
 .dark .glass-card:hover,
 .dark [class*="card"]:hover,
-.dark .card:hover,
-.dark div[class*="Card"]:hover,
-.dark div[class*="card"]:hover {
+.dark div[class*="card"]:hover,
+.dark div[class*="Card"]:hover {
   background-color: hsl(222.2 84% 4.9%) !important;
 }
 
