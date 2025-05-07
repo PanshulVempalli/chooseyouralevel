@@ -100,8 +100,9 @@
   margin: -1px;
 }
 
+/* Modified to only show shadow on hover, no color change */
 .card-hover {
-  @apply hover:shadow-md transition-all duration-300 hover:-translate-y-1;
+  @apply hover:shadow-lg transition-all duration-300 hover:-translate-y-1;
 }
 
 /* Path indicator styling */

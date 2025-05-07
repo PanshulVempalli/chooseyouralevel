@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,16 @@ const Guidance = () => {
   const [aiResponse, setAiResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  
+  // Add initial welcome message when component mounts
+  useEffect(() => {
+    setChatHistory([
+      {
+        type: "ai" as const,
+        message: "I'm your A-Level Pathfinder assistant, here to help with questions about A-Levels, university applications, and career pathways. Feel free to ask about specific subjects, UCAS points, university requirements, or how to use the tools on this website!"
+      }
+    ]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +76,7 @@ const Guidance = () => {
         "subject": "When choosing A-Level subjects, consider your interests, strengths, and future goals. Some degree courses require specific subjects (like Medicine requiring Chemistry), while others are more flexible. Use our Subject Selector to explore options based on your interests.",
         "career": "Your A-Level choices can influence career paths, especially for fields like medicine, engineering, or law that require specific degree backgrounds. Our Career to Subjects feature can help you identify which A-Levels are recommended for your dream career.",
         "grade": "A-Level grades are crucial for university applications. An A* is the highest (90%+), followed by A (80%+), B (70%+), C (60%+), D (50%+), and E (40%+). Use our Grade Calculator to see how your predicted grades match with university requirements.",
-        "default": "I'm your A-Level Pathfinder assistant, here to help with questions about A-Levels, university applications, and career pathways. Feel free to ask about specific subjects, UCAS points, university requirements, or how to use the tools on this website!"
+        "default": "I don't have specific information about that. Could you ask about A-Levels, university applications, UCAS points, or career pathways instead?"
       };
       
       // Very simple pattern matching for demo purposes
@@ -188,29 +199,22 @@ const Guidance = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="bg-muted/30 rounded-lg p-4 mb-4 h-[250px] overflow-y-auto">
-                    {chatHistory.length === 0 ? (
-                      <div className="text-center text-muted-foreground py-10">
-                        <Brain className="mx-auto h-10 w-10 mb-2 opacity-50" />
-                        <p>Ask a question to get started</p>
-                      </div>
-                    ) : (
-                      chatHistory.map((chat, index) => (
+                    {chatHistory.map((chat, index) => (
+                      <div 
+                        key={index} 
+                        className={`mb-3 ${chat.type === 'user' ? 'text-right' : ''}`}
+                      >
                         <div 
-                          key={index} 
-                          className={`mb-3 ${chat.type === 'user' ? 'text-right' : ''}`}
+                          className={`inline-block rounded-lg p-3 max-w-[85%] ${
+                            chat.type === 'user' 
+                              ? 'bg-education-primary/80 text-white' 
+                              : 'bg-muted/80'
+                          }`}
                         >
-                          <div 
-                            className={`inline-block rounded-lg p-3 max-w-[85%] ${
-                              chat.type === 'user' 
-                                ? 'bg-education-primary/80 text-white' 
-                                : 'bg-muted/80'
-                            }`}
-                          >
-                            {chat.message}
-                          </div>
+                          {chat.message}
                         </div>
-                      ))
-                    )}
+                      </div>
+                    ))}
                   </div>
 
                   <form onSubmit={handleAIQuery} className="mt-4">
@@ -244,6 +248,7 @@ const Guidance = () => {
                 <CardFooter className="flex flex-col items-start text-sm text-muted-foreground">
                   <p>This is an educational assistant designed to help with general questions.</p>
                   <p>Always verify important information with official sources.</p>
+                  <p className="text-xs mt-1 italic">Note: This assistant uses simple pattern matching, not a real language model.</p>
                 </CardFooter>
               </Card>
             </div>
