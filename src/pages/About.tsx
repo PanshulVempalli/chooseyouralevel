@@ -1,7 +1,8 @@
 
 import Layout from "@/components/Layout";
 import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, BookOpen, Award, Users, Download, BarChart, CheckCircle2, BookmarkCheck, Globe, Calculator, LineChart, MessageCircle, BookOpenText, Sparkles, Brain, FileText, School } from "lucide-react";
+import { GraduationCap, BookOpen, Award, Users, Download, BarChart, CheckCircle2, BookmarkCheck, Globe, Calculator, LineChart, MessageCircle, BookOpenText, Sparkles, Brain, FileText, School, Bot, Cpu, Lightbulb, Zap } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const About = () => {
   return (
@@ -32,6 +33,136 @@ const About = () => {
                 they can open for you.
               </p>
             </div>
+          </section>
+          
+          {/* AI Assistant Feature Highlight */}
+          <section className="mb-16">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold mb-3 inline-block gradient-text">AI Study Assistant</h2>
+              <div className="h-1 w-20 bg-gradient-to-r from-education-primary to-education-secondary rounded-full mx-auto"></div>
+            </div>
+            
+            <Card className="overflow-hidden border-0 shadow-lg fancy-border-gradient mb-10">
+              <div className="grid md:grid-cols-2 gap-0">
+                <div className="bg-gradient-to-br from-education-primary to-education-secondary p-8 text-white flex flex-col justify-center">
+                  <div className="mb-4 inline-flex p-3 bg-white/20 rounded-full w-fit">
+                    <Brain className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4">Powered by Advanced AI</h3>
+                  <p className="mb-4">Our intelligent AI assistant uses cutting-edge machine learning to provide personalized guidance tailored to your unique academic journey.</p>
+                  <ul className="space-y-2">
+                    <li className="flex items-center gap-2">
+                      <Zap className="h-5 w-5 text-amber-300" />
+                      <span>24/7 instant answers to your questions</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Cpu className="h-5 w-5 text-amber-300" />
+                      <span>Advanced algorithms for personalized recommendations</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Lightbulb className="h-5 w-5 text-amber-300" />
+                      <span>Insights based on latest educational trends</span>
+                    </li>
+                  </ul>
+                </div>
+                
+                <div className="p-8 bg-white dark:bg-gray-900">
+                  <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-6 h-full">
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="bg-education-primary/10 p-2 rounded-full">
+                        <Bot className="h-6 w-6 text-education-primary" />
+                      </div>
+                      <div className="bg-education-primary/5 p-3 rounded-lg">
+                        <p className="text-sm">How can I prepare for a Computer Science degree?</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="bg-amber-100 dark:bg-amber-900/30 p-2 rounded-full">
+                        <Brain className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+                      </div>
+                      <div className="bg-amber-50 dark:bg-amber-900/10 p-3 rounded-lg">
+                        <p className="text-sm">For a Computer Science degree, I'd recommend taking A-Level Mathematics as your core subject. Consider Further Mathematics and Physics to strengthen your analytical skills. Computer Science A-Level is beneficial but not always required. Some universities value creative subjects alongside STEM for a well-rounded application.</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start gap-3">
+                      <div className="bg-education-primary/10 p-2 rounded-full">
+                        <Bot className="h-6 w-6 text-education-primary" />
+                      </div>
+                      <div className="bg-education-primary/5 p-3 rounded-lg">
+                        <p className="text-sm">What extracurricular activities would help?</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
+            
+            <Tabs defaultValue="questions" className="w-full">
+              <TabsList className="grid w-full grid-cols-3 mb-8">
+                <TabsTrigger value="questions">Ask Anything</TabsTrigger>
+                <TabsTrigger value="personalized">Personalized Guidance</TabsTrigger>
+                <TabsTrigger value="resources">Smart Resources</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="questions" className="space-y-4">
+                <Card className="fancy-border-gradient card-hover">
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-4">
+                      <div className="bg-education-primary/10 p-3 rounded-full">
+                        <MessageCircle className="h-6 w-6 text-education-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-2">Get Expert Answers</h3>
+                        <p className="text-muted-foreground">
+                          Ask our AI assistant any question about A-Levels, university applications, subject combinations, 
+                          career pathways, and more. Receive detailed, accurate answers instantly.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="personalized" className="space-y-4">
+                <Card className="fancy-border-gradient card-hover">
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-4">
+                      <div className="bg-education-primary/10 p-3 rounded-full">
+                        <Brain className="h-6 w-6 text-education-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-2">Tailored to Your Journey</h3>
+                        <p className="text-muted-foreground">
+                          Our AI learns from your interactions to provide increasingly personalized guidance. 
+                          Get recommendations that evolve with your changing interests and career aspirations.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="resources" className="space-y-4">
+                <Card className="fancy-border-gradient card-hover">
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-4">
+                      <div className="bg-education-primary/10 p-3 rounded-full">
+                        <FileText className="h-6 w-6 text-education-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-2">Intelligent Resource Finder</h3>
+                        <p className="text-muted-foreground">
+                          Ask for specific learning resources, revision materials, or reading recommendations 
+                          for any subject. Our AI curates the most relevant and high-quality materials for your needs.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </section>
           
           <section className="mb-16">
@@ -210,7 +341,6 @@ const About = () => {
                 </CardContent>
               </Card>
 
-              {/* New Features */}
               <Card className="fancy-border-gradient card-hover">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
