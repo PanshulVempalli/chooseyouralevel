@@ -38,8 +38,6 @@
   padding: 2em;
 }
 
-/* REMOVE ALL global card hover styles from App.css since they're in index.css */
-
 .read-the-docs {
   color: #888;
 }
