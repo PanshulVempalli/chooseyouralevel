@@ -112,7 +112,7 @@ div[class*="Card"] {
   transition: transform 300ms ease, box-shadow 300ms ease !important;
 }
 
-/* Single hover style that applies to all card elements */
+/* Single hover style that applies to all card elements - MODIFIED to remove blue background */
 .card:hover,
 .card-hover:hover, 
 .fancy-border-gradient:hover, 
@@ -124,7 +124,7 @@ div[class*="Card"]:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
 }
 
-/* Light mode - preserve white background */
+/* Light mode - preserve original background */
 :root:not(.dark) .card:hover,
 :root:not(.dark) .card-hover:hover, 
 :root:not(.dark) .fancy-border-gradient:hover, 
@@ -132,10 +132,10 @@ div[class*="Card"]:hover {
 :root:not(.dark) [class*="card"]:hover,
 :root:not(.dark) div[class*="card"]:hover,
 :root:not(.dark) div[class*="Card"]:hover {
-  background-color: white !important;
+  background-color: inherit !important;
 }
 
-/* Dark mode - preserve dark background */
+/* Dark mode - preserve original background */
 .dark .card:hover,
 .dark .card-hover:hover, 
 .dark .fancy-border-gradient:hover, 
@@ -143,7 +143,7 @@ div[class*="Card"]:hover {
 .dark [class*="card"]:hover,
 .dark div[class*="card"]:hover,
 .dark div[class*="Card"]:hover {
-  background-color: hsl(222.2 84% 4.9%) !important;
+  background-color: inherit !important;
 }
 
 /* Path indicator styling */
