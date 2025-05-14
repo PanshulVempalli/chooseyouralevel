@@ -100,8 +100,7 @@
   margin: -1px;
 }
 
-/* ======= CONSOLIDATED CARD HOVER STYLES ======= */
-/* Apply transition to all card elements */
+/* REMOVED ALL HOVER EFFECTS FOR CARDS */
 .card,
 .card-hover, 
 .fancy-border-gradient, 
@@ -109,10 +108,10 @@
 [class*="card"],
 div[class*="card"],
 div[class*="Card"] {
-  transition: transform 300ms ease, box-shadow 300ms ease !important;
+  /* No transition effects */
 }
 
-/* Single hover style that applies to all card elements - MODIFIED to remove blue background */
+/* REMOVED ALL HOVER EFFECTS */
 .card:hover,
 .card-hover:hover, 
 .fancy-border-gradient:hover, 
@@ -120,30 +119,7 @@ div[class*="Card"] {
 [class*="card"]:hover,
 div[class*="card"]:hover,
 div[class*="Card"]:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
-}
-
-/* Light mode - preserve original background */
-:root:not(.dark) .card:hover,
-:root:not(.dark) .card-hover:hover, 
-:root:not(.dark) .fancy-border-gradient:hover, 
-:root:not(.dark) .glass-card:hover,
-:root:not(.dark) [class*="card"]:hover,
-:root:not(.dark) div[class*="card"]:hover,
-:root:not(.dark) div[class*="Card"]:hover {
-  background-color: inherit !important;
-}
-
-/* Dark mode - preserve original background */
-.dark .card:hover,
-.dark .card-hover:hover, 
-.dark .fancy-border-gradient:hover, 
-.dark .glass-card:hover,
-.dark [class*="card"]:hover,
-.dark div[class*="card"]:hover,
-.dark div[class*="Card"]:hover {
-  background-color: inherit !important;
+  /* No transform or box-shadow on hover */
 }
 
 /* Path indicator styling */
@@ -159,11 +135,11 @@ div[class*="Card"]:hover {
 /* Button variants */
 @layer components {
   .btn-gradient {
-    @apply bg-gradient-to-r from-education-primary to-education-secondary text-white hover:from-education-primary/90 hover:to-education-secondary/90;
+    @apply bg-gradient-to-r from-education-primary to-education-secondary text-white;
   }
 
   .btn-outline-gradient {
-    @apply border border-transparent bg-white dark:bg-gray-900 hover:text-white;
+    @apply border border-transparent bg-white dark:bg-gray-900;
     background-clip: padding-box;
     position: relative;
   }
@@ -172,10 +148,5 @@ div[class*="Card"]:hover {
     content: "";
     @apply absolute inset-0 rounded-[inherit] p-[1px] -z-10 bg-gradient-to-r from-education-primary to-education-secondary;
     margin: -1px;
-  }
-  
-  /* Add hover state that just changes the background to slightly darker */
-  .btn-outline-gradient:hover::before {
-    @apply bg-gradient-to-r from-education-primary/90 to-education-secondary/90;
   }
 }
