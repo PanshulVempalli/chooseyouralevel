@@ -30,8 +30,8 @@ const Navbar = () => {
     <nav className={`sticky top-0 z-10 transition-all duration-300 ${
       scrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
     }`}>
-      <div className="container flex items-center h-16 px-0 max-w-screen-xl mx-auto">
-        <Link to="/" className="flex items-center gap-3 group ml-0 pl-4" onClick={scrollToTop}>
+      <div className="flex items-center h-16 max-w-screen-xl mx-auto">
+        <Link to="/" className="flex items-center gap-3 group pl-4" onClick={scrollToTop}>
           <div className="bg-education-primary/10 p-3 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
             <GraduationCap size={32} className="text-education-primary" />
           </div>
