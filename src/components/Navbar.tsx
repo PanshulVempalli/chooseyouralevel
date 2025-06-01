@@ -31,11 +31,11 @@ const Navbar = () => {
       scrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
     }`}>
       <div className="container flex items-center h-16 px-2 max-w-screen-xl mx-auto">
-        <Link to="/" className="flex items-center gap-1 group mr-2" onClick={scrollToTop}>
-          <div className="bg-education-primary/10 p-1 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
-            <GraduationCap size={20} className="text-education-primary" />
+        <Link to="/" className="flex items-center gap-2 group mr-2" onClick={scrollToTop}>
+          <div className="bg-education-primary/10 p-2 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
+            <GraduationCap size={28} className="text-education-primary" />
           </div>
-          <span className="font-bold text-base gradient-text whitespace-nowrap">A-Level</span>
+          <span className="font-bold text-lg gradient-text whitespace-nowrap">A-Level</span>
         </Link>
         
         <div className="hidden md:flex justify-between items-center w-full">
