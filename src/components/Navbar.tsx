@@ -30,15 +30,15 @@ const Navbar = () => {
     <nav className={`sticky top-0 z-10 transition-all duration-300 ${
       scrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
     }`}>
-      <div className="container flex items-center h-16 px-2 max-w-screen-xl mx-auto">
-        <Link to="/" className="flex items-center gap-2 group mr-2" onClick={scrollToTop}>
-          <div className="bg-education-primary/10 p-2 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
-            <GraduationCap size={28} className="text-education-primary" />
+      <div className="container flex items-center h-16 px-0 max-w-screen-xl mx-auto">
+        <Link to="/" className="flex items-center gap-3 group ml-0 pl-4" onClick={scrollToTop}>
+          <div className="bg-education-primary/10 p-3 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
+            <GraduationCap size={32} className="text-education-primary" />
           </div>
-          <span className="font-bold text-lg gradient-text whitespace-nowrap">A-Level</span>
+          <span className="font-bold text-xl gradient-text whitespace-nowrap">A-Level</span>
         </Link>
         
-        <div className="hidden md:flex justify-between items-center w-full">
+        <div className="hidden md:flex justify-between items-center w-full pl-4">
           <div className="flex justify-between items-center w-full">
             <Link to="/" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Home
