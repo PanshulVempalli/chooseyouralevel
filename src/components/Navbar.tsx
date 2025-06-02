@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -30,7 +29,7 @@ const Navbar = () => {
     <nav className={`sticky top-0 z-10 transition-all duration-300 ${
       scrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
     }`}>
-      <div className="flex items-center h-16 max-w-screen-xl mx-auto">
+      <div className="flex items-center h-16 w-full pl-0">
         <Link to="/" className="flex items-center gap-3 group" onClick={scrollToTop}>
           <div className="bg-education-primary/10 p-3 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
             <GraduationCap size={32} className="text-education-primary" />
