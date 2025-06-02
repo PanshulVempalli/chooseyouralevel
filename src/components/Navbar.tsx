@@ -30,7 +30,7 @@ const Navbar = () => {
     <nav className={`sticky top-0 z-10 transition-all duration-300 ${
       scrolled ? "bg-background/95 backdrop-blur-sm shadow-sm" : "bg-transparent"
     }`}>
-      <div className="flex items-center h-16 w-full">
+      <div className="flex items-center justify-between h-16 w-full px-4">
         <Link to="/" className="flex items-center gap-3 group" onClick={scrollToTop}>
           <div className="bg-education-primary/10 p-3 rounded-full transition-all duration-300 group-hover:bg-education-primary/20">
             <GraduationCap size={32} className="text-education-primary" />
@@ -38,8 +38,8 @@ const Navbar = () => {
           <span className="font-bold text-xl gradient-text whitespace-nowrap">A-Level</span>
         </Link>
         
-        <div className="hidden md:flex justify-between items-center w-full pl-4">
-          <div className="flex justify-between items-center w-full gap-1">
+        <div className="hidden md:flex justify-center items-center flex-1">
+          <div className="flex items-center gap-1">
             <Link to="/" onClick={scrollToTop} className="px-0.5 font-medium text-lg whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Home
             </Link>
@@ -63,8 +63,10 @@ const Navbar = () => {
             </Link>
           </div>
         </div>
-        
-        <MobileMenu onLinkClick={scrollToTop} />
+
+        <div className="w-32 flex justify-end">
+          <MobileMenu onLinkClick={scrollToTop} />
+        </div>
       </div>
     </nav>
   );
