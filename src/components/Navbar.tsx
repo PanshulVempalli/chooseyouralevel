@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { GraduationCap } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -38,26 +39,26 @@ const Navbar = () => {
         </Link>
         
         <div className="hidden md:flex justify-between items-center w-full pl-4">
-          <div className="flex justify-between items-center w-full">
-            <Link to="/" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+          <div className="flex justify-between items-center w-full gap-2">
+            <Link to="/" onClick={scrollToTop} className="px-1 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Home
             </Link>
-            <Link to="/about" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            <Link to="/about" onClick={scrollToTop} className="px-1 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               About
             </Link>
-            <Link to="/subject-selector" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            <Link to="/subject-selector" onClick={scrollToTop} className="px-1 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Subject Selector
             </Link>
-            <Link to="/career-to-subjects" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            <Link to="/career-to-subjects" onClick={scrollToTop} className="px-1 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Career to Subjects
             </Link>
-            <Link to="/grade-calculator" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            <Link to="/grade-calculator" onClick={scrollToTop} className="px-1 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Grade Calculator
             </Link>
-            <Link to="/subjects" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            <Link to="/subjects" onClick={scrollToTop} className="px-1 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Subjects
             </Link>
-            <Link to="/guidance" onClick={scrollToTop} className="px-2 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
+            <Link to="/guidance" onClick={scrollToTop} className="px-1 font-medium text-base whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Guidance
             </Link>
           </div>
