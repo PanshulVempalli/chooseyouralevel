@@ -39,7 +39,7 @@ const Navbar = () => {
         </Link>
         
         <div className="hidden md:flex justify-center items-center flex-1">
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-6">
             <Link to="/" onClick={scrollToTop} className="px-0.5 font-medium text-lg whitespace-nowrap hover:text-education-primary transition-colors relative after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-education-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left">
               Home
             </Link>
