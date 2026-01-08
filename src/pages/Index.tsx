@@ -57,30 +57,6 @@ const Index = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Sample testimonials data
-  const testimonials = [
-    {
-      id: 1,
-      name: "Emma W.",
-      role: "A-Level Student, London",
-      text: "A-Level Pathfinder helped me discover career options I'd never considered before. Now I'm pursuing a degree in Biotechnology with confidence!",
-      rating: 5
-    },
-    {
-      id: 2,
-      name: "Jamal K.",
-      role: "Recent Graduate, Manchester",
-      text: "I wish I had this tool when I was choosing my A-Levels. The career pathway suggestions are spot on and helped me refine my university choices.",
-      rating: 5
-    },
-    {
-      id: 3,
-      name: "Sarah L.",
-      role: "Career Advisor, Brighton College",
-      text: "I recommend A-Level Pathfinder to all my students. It's an excellent resource that helps them see the connection between subject choices and future careers.",
-      rating: 4
-    }
-  ];
 
   // Sample featured pathways
   const featuredPathways = [
@@ -386,58 +362,6 @@ const Index = () => {
               </div>
             </section>
 
-            {/* Testimonials section - Modified hover effect */}
-            <section className="py-20 bg-gray-50 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-full h-full hero-pattern opacity-50 pointer-events-none"></div>
-              
-              <div className="container px-4 relative z-10">
-                <div className="max-w-6xl mx-auto">
-                  <div className="mb-16 text-center">
-                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-education-primary/10 text-education-primary text-sm font-medium mb-4">
-                      <Users className="h-4 w-4 mr-2" />
-                      <span>Success stories</span>
-                    </div>
-                    <h2 className="text-3xl font-bold mb-4">
-                      What Students Say
-                    </h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                      Hear from students who have used A-Level Pathfinder to help guide their academic and career decisions
-                    </p>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {testimonials.map((testimonial) => (
-                      <Card key={testimonial.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                        <CardContent className="p-8">
-                          <div className="flex mb-6">
-                            {[...Array(testimonial.rating)].map((_, i) => (
-                              <Star key={i} className="h-5 w-5 text-yellow-400 fill-yellow-400" />
-                            ))}
-                          </div>
-                          <p className="italic text-gray-600 mb-8 text-lg">"{testimonial.text}"</p>
-                          <div className="flex items-center">
-                            <div className="bg-education-primary/20 rounded-full h-12 w-12 flex items-center justify-center mr-4">
-                              <Users className="h-5 w-5 text-education-primary" />
-                            </div>
-                            <div>
-                              <h4 className="font-semibold">{testimonial.name}</h4>
-                              <p className="text-sm text-gray-600">{testimonial.role}</p>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                  
-                  {/* Disclaimer */}
-                  <div className="mt-8 text-center">
-                    <p className="text-sm text-gray-500 italic p-3 bg-gray-100 rounded-md inline-block">
-                      Disclaimer: The testimonials shown are for demonstration purposes only and do not represent actual individuals or their experiences.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
             
             <section className="py-16 bg-gray-50">
               <div className="container px-4">
