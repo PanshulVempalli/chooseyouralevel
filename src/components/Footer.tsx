@@ -115,7 +115,7 @@ const Footer = () => {
         
         <div className="border-t border-border pt-6 flex flex-col md:flex-row justify-between items-center">
           <div className="text-sm text-muted-foreground mb-4 md:mb-0">
-            <p>© {currentYear} A-Level Pathfinder. All rights reserved.</p>
+            <p>© {currentYear} A-Level Pathfinder by Panshul Vempalli. All rights reserved.</p>
           </div>
           
           <div>
